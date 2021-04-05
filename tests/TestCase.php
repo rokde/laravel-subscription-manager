@@ -39,7 +39,7 @@ class TestCase extends Orchestra
         include_once __DIR__.'/../database/migrations/2021_04_05_000001_create_plans_table.php';
         (new \CreatePlansTable())->up();
 
-        include_once __DIR__.'/../database/migrations/2021_04_05_000002_create_plan_features_table.php';
-        (new \CreatePlanFeaturesTable())->up();
+        include_once __DIR__.'/../database/migrations/2021_04_05_000002_create_plan_feature_table.php';
+        (new \CreatePlanFeatureTable())->up();
     }
 }

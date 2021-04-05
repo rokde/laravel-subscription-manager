@@ -29,6 +29,6 @@ class Feature extends Model
 
     public function plans(): BelongsToMany
     {
-        return $this->belongsToMany(Plan::class, 'plan_features');
+        return $this->belongsToMany(Plan::class, 'plan_feature');
     }
 }

@@ -12,21 +12,21 @@ class FeatureTest extends TestCase
     public function a_feature_can_resist_in_many_plans()
     {
         /** @var Feature $feature1 */
-        $feature1 = Feature::factory()->create();
+        $feature1 = Feature::factory()->create(['code' => 'f1']);
         /** @var Feature $feature2 */
-        $feature2 = Feature::factory()->create();
+        $feature2 = Feature::factory()->create(['code' => 'f2']);
         /** @var Plan $planA */
-        $planA = Plan::factory()->create();
+        $planA = Plan::factory()->create(['name' => 'a']);
         /** @var Plan $planB */
-        $planB = Plan::factory()->create();
+        $planB = Plan::factory()->create(['name' => 'b']);
 
         $feature1->plans()->attach($planA);
         $feature1->plans()->attach($planB);
         $feature2->plans()->attach($planA);
 
-        $this->assertCount(2, $planA->features);
-        $this->assertCount(1, $planB->features);
-        $this->assertCount(2, $feature1->plans);
-        $this->assertCount(1, $feature2->plans);
+        $this->assertCount(2, Plan::whereName('a')->first()->features);
+        $this->assertCount(1, Plan::whereName('b')->first()->features);
+        $this->assertCount(2, Feature::whereCode('f1')->first()->plans);
+        $this->assertCount(1, Feature::whereCode('f2')->first()->plans);
     }
 }
