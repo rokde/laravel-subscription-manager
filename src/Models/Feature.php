@@ -27,6 +27,11 @@ class Feature extends Model
         'code',
     ];
 
+    public static function byCode(string $code): ?self
+    {
+        return static::where('code', $code)->first();
+    }
+
     public function plans(): BelongsToMany
     {
         return $this->belongsToMany(Plan::class, 'plan_feature');

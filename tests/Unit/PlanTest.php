@@ -29,4 +29,13 @@ class PlanTest extends TestCase
         $this->assertCount(2, Feature::whereCode('f1')->first()->plans);
         $this->assertCount(1, Feature::whereCode('f2')->first()->plans);
     }
+
+    /** @test */
+    public function it_can_be_loaded_by_name()
+    {
+        /** @var Plan $planA */
+        $planA = Plan::factory()->create(['name' => 'a']);
+
+        $this->assertEquals($planA->getKey(), Plan::byName('a')->getKey());
+    }
 }

@@ -29,4 +29,13 @@ class FeatureTest extends TestCase
         $this->assertCount(2, Feature::whereCode('f1')->first()->plans);
         $this->assertCount(1, Feature::whereCode('f2')->first()->plans);
     }
+
+    /** @test */
+    public function it_can_be_loaded_by_code()
+    {
+        /** @var Feature $feature1 */
+        $feature1 = Feature::factory()->create(['code' => 'f1']);
+
+        $this->assertEquals($feature1->getKey(), Feature::byCode('f1')->getKey());
+    }
 }
