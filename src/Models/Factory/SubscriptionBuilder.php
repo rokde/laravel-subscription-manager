@@ -74,7 +74,7 @@ class SubscriptionBuilder
         return $this->skipTrial
             ? null
             : (
-            $this->trialDays !== null
+                $this->trialDays !== null
                 ? Carbon::now()->addDays($this->trialDays)
                 : null
             );
