@@ -40,9 +40,9 @@ use Rokde\SubscriptionManager\Models\Concerns\HandlesCancellation;
  */
 class Subscription extends Model
 {
-    use HandlesCancellation,
-        HasFactory,
-        SoftDeletes;
+    use HandlesCancellation;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $guarded = [];
 
@@ -115,7 +115,7 @@ class Subscription extends Model
 
     public function recurring(): bool
     {
-        return !$this->onTrial() && !$this->cancelled();
+        return ! $this->onTrial() && ! $this->cancelled();
     }
 
     public function scopeRecurring(Builder $query)
@@ -140,7 +140,7 @@ class Subscription extends Model
 
     public function ended(): bool
     {
-        return $this->cancelled() && !$this->onGracePeriod();
+        return $this->cancelled() && ! $this->onGracePeriod();
     }
 
     public function scopeEnded(Builder $query)
