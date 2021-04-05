@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateSubscriptionsTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('subscriptions', function (Blueprint $table) {
+            $table->id();
+            $table->morphs('subscribable');
+            $table->foreignId('plan_id')->nullable()->constrained();
+            $table->longtext('features')->nullable()->default(null);
+            $table->timestamp('trial_ends_at')->nullable()->default(null);
+            $table->timestamp('ends_at')->nullable()->default(null);
+            $table->softDeletes();
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('subscriptions');
+    }
+}
