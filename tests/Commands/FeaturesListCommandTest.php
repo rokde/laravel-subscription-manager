@@ -3,6 +3,7 @@
 namespace Rokde\SubscriptionManager\Tests\Commands;
 
 use Rokde\SubscriptionManager\Models\Feature;
+use Rokde\SubscriptionManager\Models\Plan;
 use Rokde\SubscriptionManager\Tests\TestCase;
 
 class FeaturesListCommandTest extends TestCase
@@ -11,7 +12,7 @@ class FeaturesListCommandTest extends TestCase
     public function it_can_ask_for_empty_features()
     {
         $this->artisan('features:list')
-            ->expectsTable(['feature'], [])
+            ->expectsTable(['feature', 'plans'], [])
             ->run();
     }
 
@@ -24,9 +25,9 @@ class FeaturesListCommandTest extends TestCase
         $feature2 = Feature::factory()->create(['code' => 'first-feature']);
 
         $this->artisan('features:list')
-            ->expectsTable(['feature'], [
-                ['first-feature'],
-                ['last-feature'],
+            ->expectsTable(['feature', 'plans'], [
+                ['first-feature', ''],
+                ['last-feature', ''],
             ])
             ->run();
     }
