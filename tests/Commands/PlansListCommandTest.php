@@ -2,7 +2,6 @@
 
 namespace Rokde\SubscriptionManager\Tests\Commands;
 
-use Illuminate\Support\Facades\Artisan;
 use Rokde\SubscriptionManager\Models\Feature;
 use Rokde\SubscriptionManager\Models\Plan;
 use Rokde\SubscriptionManager\Tests\TestCase;
