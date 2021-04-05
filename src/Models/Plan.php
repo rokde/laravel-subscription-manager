@@ -5,6 +5,7 @@ namespace Rokde\SubscriptionManager\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Plan
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|Feature[] $features
+ * @property-read \Illuminate\Database\Eloquent\Collection|Subscription[] $subscriptions
  * @method static \Illuminate\Database\Eloquent\Builder|Plan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Plan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Plan query()
@@ -35,5 +37,10 @@ class Plan extends Model
     public function features(): BelongsToMany
     {
         return $this->belongsToMany(Feature::class, 'plan_feature');
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
     }
 }
