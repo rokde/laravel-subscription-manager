@@ -1,6 +1,6 @@
 <?php
 
-namespace VendorName\Skeleton\Tests;
+namespace Rokde\SubscriptionManager\Tests;
 
 class ExampleTest extends TestCase
 {
