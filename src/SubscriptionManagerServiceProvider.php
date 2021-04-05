@@ -2,8 +2,10 @@
 
 namespace Rokde\SubscriptionManager;
 
+use Illuminate\Routing\Router;
 use Rokde\SubscriptionManager\Commands\FeaturesListCommand;
 use Rokde\SubscriptionManager\Commands\PlansListCommand;
+use Rokde\SubscriptionManager\Http\Middleware\Subscribed;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -21,5 +23,14 @@ class SubscriptionManagerServiceProvider extends PackageServiceProvider
             ->hasMigration('create_subscriptions_table')
             ->hasCommand(FeaturesListCommand::class)
             ->hasCommand(PlansListCommand::class);
+    }
+
+    public function packageBooted()
+    {
+        parent::packageBooted();
+
+        /** @var Router $router */
+        $router = $this->app->make(Router::class);
+        $router->aliasMiddleware('subscribed', Subscribed::class);
     }
 }
