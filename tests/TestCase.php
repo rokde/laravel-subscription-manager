@@ -33,13 +33,13 @@ class TestCase extends Orchestra
             'prefix' => '',
         ]);
 
-        include_once __DIR__.'/../database/migrations/2021_04_05_000000_create_features_table.php';
+        include_once __DIR__.'/../database/migrations/create_features_table.php.stub';
         (new \CreateFeaturesTable())->up();
 
-        include_once __DIR__.'/../database/migrations/2021_04_05_000001_create_plans_table.php';
+        include_once __DIR__.'/../database/migrations/create_plans_table.php.stub';
         (new \CreatePlansTable())->up();
 
-        include_once __DIR__.'/../database/migrations/2021_04_05_000002_create_plan_feature_table.php';
+        include_once __DIR__.'/../database/migrations/create_plan_feature_table.php.stub';
         (new \CreatePlanFeatureTable())->up();
     }
 }
