@@ -1,9 +1,9 @@
 # This is my package SubscriptionManager
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/rokde/laravel_subscription_manager.svg?style=flat-square)](https://packagist.org/packages/rokde/laravel_subscription_manager)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/rokde/laravel_subscription_manager/run-tests?label=tests)](https://github.com/rokde/laravel_subscription_manager/actions?query=workflow%3ATests+branch%3Amaster)
-[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/rokde/laravel_subscription_manager/Check%20&%20fix%20styling?label=code%20style)](https://github.com/rokde/laravel_subscription_manager/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
-[![Total Downloads](https://img.shields.io/packagist/dt/rokde/laravel_subscription_manager.svg?style=flat-square)](https://packagist.org/packages/rokde/laravel_subscription_manager)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/rokde/laravel-subscription-manager.svg?style=flat-square)](https://packagist.org/packages/rokde/laravel-subscription-manager)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/rokde/laravel-subscription-manager/run-tests?label=tests)](https://github.com/rokde/laravel-subscription-manager/actions?query=workflow%3ATests+branch%3Amaster)
+[![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/rokde/laravel-subscription-manager/Check%20&%20fix%20styling?label=code%20style)](https://github.com/rokde/laravel-subscription-manager/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
+[![Total Downloads](https://img.shields.io/packagist/dt/rokde/laravel-subscription-manager.svg?style=flat-square)](https://packagist.org/packages/rokde/laravel-subscription-manager)
 
 The Laravel Subscription Manager should handle all subscription based stuff without handling any payment. In contrary to the well known payment handling packages like cashier or similar we do not support any payment handling. Just the plans with features, subscribing, starting with a trial and pro-rating or going on an grace period and so on.
 
@@ -34,7 +34,7 @@ composer require rokde/laravel-subscription-manager
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --provider="Rokde\SubscriptionManager\SubscriptionManagerServiceProvider" --tag="laravel_subscription_manager-migrations"
+php artisan vendor:publish --provider="Rokde\SubscriptionManager\SubscriptionManagerServiceProvider" --tag="laravel-subscription-manager-migrations"
 php artisan migrate --step
 ```
 
