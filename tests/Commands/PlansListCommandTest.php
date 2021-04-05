@@ -12,7 +12,7 @@ class PlansListCommandTest extends TestCase
     public function it_can_ask_for_empty_plans()
     {
         $this->artisan('plans:list')
-            ->expectsTable(['name', 'features'], [])
+            ->expectsTable(['plan', 'features'], [])
             ->run();
     }
 
@@ -34,7 +34,7 @@ class PlansListCommandTest extends TestCase
 
         $this->artisan('plans:list')
             ->assertExitCode(0)
-            ->expectsTable(['name', 'features'], [
+            ->expectsTable(['plan', 'features'], [
                 ['A', 'f1'],
                 ['B', 'f1, f2'],
             ])

@@ -11,7 +11,7 @@ class FeaturesListCommandTest extends TestCase
     public function it_can_ask_for_empty_features()
     {
         $this->artisan('features:list')
-            ->expectsTable(['code'], [])
+            ->expectsTable(['feature'], [])
             ->run();
     }
 
@@ -24,7 +24,7 @@ class FeaturesListCommandTest extends TestCase
         $feature2 = Feature::factory()->create(['code' => 'first-feature']);
 
         $this->artisan('features:list')
-            ->expectsTable(['code'], [
+            ->expectsTable(['feature'], [
                 ['first-feature'],
                 ['last-feature'],
             ])

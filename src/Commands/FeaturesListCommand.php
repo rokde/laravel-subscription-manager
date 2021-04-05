@@ -13,6 +13,15 @@ class FeaturesListCommand extends Command
 
     public function handle()
     {
-        $this->table(['code'], Feature::orderBy('code')->get('code')->toArray());
+        $rows = Feature::orderBy('code')
+            ->get()
+            ->map(function (Feature $feature) {
+                return [
+                    $feature->code,
+                    $feature->plans->sortBy('name')->pluck('name')->implode(', '),
+                ];
+            });
+
+        $this->table(['feature', 'plans'], $rows->toArray());
     }
 }

@@ -22,6 +22,6 @@ class PlansListCommand extends Command
                 ];
             });
 
-        $this->table(['name', 'features'], $rows->toArray());
+        $this->table(['plan', 'features'], $rows->toArray());
     }
 }
