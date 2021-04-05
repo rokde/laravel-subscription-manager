@@ -35,8 +35,8 @@ class PlansListCommandTest extends TestCase
         $this->artisan('plans:list')
             ->assertExitCode(0)
             ->expectsTable(['name', 'features'], [
-                ['A', ''],//    does not test well on sqlite
-                ['B', ''],//    does not test well on sqlite
+                ['A', 'f1'],
+                ['B', 'f1, f2'],
             ])
             ->run();
     }

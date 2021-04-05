@@ -13,13 +13,12 @@ class PlansListCommand extends Command
 
     public function handle()
     {
-        $rows = Plan::with('features')
-            ->orderBy('name')
-            ->get('name')
+        $rows = Plan::orderBy('name')
+            ->get()
             ->map(function (Plan $plan) {
                 return [
                     $plan->name,
-                    $plan->features->sortBy('code')->implode(', '),
+                    $plan->features->sortBy('code')->pluck('code')->implode(', '),
                 ];
             });
 
