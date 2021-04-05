@@ -26,7 +26,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: mbstring, pdo, sqlite, pdo_sqlite
+          extensions: mbstring, pdo, sqlite, pdo_sqlite, fileinfo
           coverage: none
 
       - name: Setup problem matchers
