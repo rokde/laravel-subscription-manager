@@ -5,54 +5,48 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/rokde/laravel_subscription_manager/Check%20&%20fix%20styling?label=code%20style)](https://github.com/rokde/laravel_subscription_manager/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/rokde/laravel_subscription_manager.svg?style=flat-square)](https://packagist.org/packages/rokde/laravel_subscription_manager)
 
-[](delete) 1) manually replace `Robert Kummer, rokde, auhor@domain.com, rokde, rokde, Vendor Name, laravel-subscription-manager, laravel_subscription_manager, laravel_subscription_manager, SubscriptionManager, This is my package SubscriptionManager` with their correct values
-[](delete) in `CHANGELOG.md, LICENSE.md, README.md, ExampleTest.php, ModelFactory.php, SubscriptionManager.php, SubscriptionManagerCommand.php, SubscriptionManagerFacade.php, SubscriptionManagerServiceProvider.php, TestCase.php, composer.json, create_laravel_subscription_manager_table.php.stub`
-[](delete) and delete `configure-laravel_subscription_manager.sh`
+The Laravel Subscription Manager should handle all subscription based stuff without handling any payment. In contrary to the well known payment handling packages like cashier or similar we do not support any payment handling. Just the plans with features, subscribing, starting with a trial and pro-rating or going on an grace period and so on.
 
-[](delete) 2) You can also run `./configure-laravel_subscription_manager.sh` to do this automatically.
+For communicating the changes we threw a lot of events and have a toolkit on board including middlewares, blade conditions and other ask-for-feature acceptance services.
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+What it is not:
+- Handling prices
+- Doing a checkout
+- Handling coupons or vouchers
+- Handling marketing data
+- Printing invoices
 
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/package-laravel_subscription_manager-laravel.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/package-laravel_subscription_manager-laravel)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+What it is:
+- Assemble Features to plans
+- Subscribe a user (or other models) to one or more plans
+  - add or remove features to an existing subscription
+- Check paid status of a feature (like a guard) for a given user (or other models)
+- Display subscription with details
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require rokde/laravel_subscription_manager
+composer require rokde/laravel-subscription-manager
 ```
 
 You can publish and run the migrations with:
 
 ```bash
 php artisan vendor:publish --provider="Rokde\SubscriptionManager\SubscriptionManagerServiceProvider" --tag="laravel_subscription_manager-migrations"
-php artisan migrate
+php artisan migrate --step
 ```
 
 You can publish the config file with:
 ```bash
-php artisan vendor:publish --provider="Rokde\SubscriptionManager\SubscriptionManagerServiceProvider" --tag="laravel_subscription_manager-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
+php artisan vendor:publish --provider="Rokde\SubscriptionManager\SubscriptionManagerServiceProvider" --tag="laravel-subscription-manager-config"
 ```
 
 ## Usage
 
 ```php
-$laravel_subscription_manager = new Rokde\SubscriptionManager();
-echo $laravel_subscription_manager->echoPhrase('Hello, Spatie!');
+// coming soon...
 ```
 
 ## Testing
