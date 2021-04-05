@@ -33,9 +33,13 @@ class TestCase extends Orchestra
             'prefix' => '',
         ]);
 
-        /*
-        include_once __DIR__.'/../database/migrations/create_laravel_subscription_manager_table.php';
-        (new \CreatePackageTable())->up();
-        */
+        include_once __DIR__.'/../database/migrations/2021_04_05_000000_create_features_table.php';
+        (new \CreateFeaturesTable())->up();
+
+        include_once __DIR__.'/../database/migrations/2021_04_05_000001_create_plans_table.php';
+        (new \CreatePlansTable())->up();
+
+        include_once __DIR__.'/../database/migrations/2021_04_05_000002_create_plan_features_table.php';
+        (new \CreatePlanFeaturesTable())->up();
     }
 }

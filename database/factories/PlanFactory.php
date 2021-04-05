@@ -3,17 +3,16 @@
 namespace Rokde\SubscriptionManager\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Rokde\SubscriptionManager\Models\Plan;
 
-/*
-class ModelFactory extends Factory
+class PlanFactory extends Factory
 {
-    protected $model = YourModel::class;
+    protected $model = Plan::class;
 
     public function definition()
     {
         return [
-
+            'name' => $this->faker->name,
         ];
     }
 }
-*/
