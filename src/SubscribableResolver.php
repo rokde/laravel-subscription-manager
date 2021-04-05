@@ -2,19 +2,20 @@
 
 namespace Rokde\SubscriptionManager;
 
+use Closure;
 use Illuminate\Support\Facades\Auth;
 
 class SubscribableResolver
 {
     private static $subscribableResolver = null;
 
-    public static function resolveSubscribable(\callable $callback = null): void
+    public static function resolveSubscribable(Closure $callback = null): void
     {
         static::$subscribableResolver = $callback;
     }
 
     /**
-     * @return \Illuminate\Contracts\Auth\Authenticatable|\Illuminate\Database\Eloquent\Model|\Rokde\SubscriptionManager\Models\Concerns\Subscribable
+     * @return \Illuminate\Contracts\Auth\Authenticatable|\Illuminate\Database\Eloquent\Model|\Rokde\SubscriptionManager\Models\Concerns\|null
      */
     public static function subscribable()
     {
