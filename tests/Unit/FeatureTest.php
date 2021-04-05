@@ -28,6 +28,5 @@ class FeatureTest extends TestCase
         $this->assertCount(1, $planB->features);
         $this->assertCount(2, $feature1->plans);
         $this->assertCount(1, $feature2->plans);
-
     }
 }
