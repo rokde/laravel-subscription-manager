@@ -3,7 +3,6 @@
 namespace Rokde\SubscriptionManager\Tests\Commands;
 
 use Rokde\SubscriptionManager\Models\Feature;
-use Rokde\SubscriptionManager\Models\Plan;
 use Rokde\SubscriptionManager\Tests\TestCase;
 
 class FeaturesListCommandTest extends TestCase
