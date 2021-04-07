@@ -207,7 +207,7 @@ class Subscription extends Model
                 $endDate = $hardEndDate->clone();
             }
 
-            $circles[] = new SubscriptionCircle($this, $startDate->clone(), $endDate->clone(), count($circles)+1);
+            $circles[] = new SubscriptionCircle($this, $startDate->clone(), $endDate->clone(), count($circles) + 1);
 
             //  prepare for next run
             $startDate = $endDate->clone();
