@@ -13,6 +13,7 @@ use Rokde\SubscriptionManager\Models\Subscription;
  * @package Rokde\SubscriptionManager\Models\Concerns
  *
  * @property-read \Illuminate\Database\Eloquent\Model $this
+ * @property-read \Illuminate\Database\Eloquent\Collection|Subscription[] $activeSubscriptions
  * @property-read \Illuminate\Database\Eloquent\Collection|Subscription[] $subscriptions
  * @property-read int|null $subscriptions_count
  * @property-read null|Subscription $subscription
@@ -38,13 +39,21 @@ trait Subscribable
     public function subscriptions(): MorphMany
     {
         return $this->morphMany(Subscription::class, 'subscribable')
-            ->latest();
+            ->latest('id');
+    }
+
+    public function activeSubscriptions(): MorphMany
+    {
+        return $this->morphMany(Subscription::class, 'subscribable')
+            ->active()
+            ->latest('id');
     }
 
     public function subscription(): MorphOne
     {
         return $this->morphOne(Subscription::class, 'subscribable')
-            ->latest();
+            ->active()
+            ->latest('id');
     }
 
     /**
@@ -53,15 +62,31 @@ trait Subscribable
      */
     public function subscribed($feature = null): bool
     {
-        return $this->subscriptions
+        return $this->activeSubscriptions
                 ->first(function (Subscription $subscription) use ($feature) {
                     return $subscription->valid() && ($feature === null || $subscription->hasFeature($feature));
                 }) !== null;
     }
 
+    /**
+     * returns all active subscribed features
+     *
+     * @return array|string[]
+     */
+    public function subscribedFeatures(): array
+    {
+        return $this->activeSubscriptions->flatMap(function (Subscription $subscription) {
+            return (array)$subscription->features;
+        })
+            ->unique()
+            ->sort()
+            ->values()
+            ->all();
+    }
+
     public function onPlan(Plan $plan): bool
     {
-        return $this->subscriptions()
+        return $this->activeSubscriptions()
                 ->where('plan_id', $plan->getKey())
                 ->get()
                 ->first(function (Subscription $subscription) {
