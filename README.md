@@ -1,16 +1,17 @@
-# This is my package SubscriptionManager
+# The Subscription Manager for Laravel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/rokde/laravel-subscription-manager.svg?style=flat-square)](https://packagist.org/packages/rokde/laravel-subscription-manager)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/rokde/laravel-subscription-manager/run-tests?label=tests)](https://github.com/rokde/laravel-subscription-manager/actions?query=workflow%3ATests+branch%3Amaster)
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/rokde/laravel-subscription-manager/Check%20&%20fix%20styling?label=code%20style)](https://github.com/rokde/laravel-subscription-manager/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/rokde/laravel-subscription-manager.svg?style=flat-square)](https://packagist.org/packages/rokde/laravel-subscription-manager)
 
-The Laravel Subscription Manager should handle all subscription based stuff without handling any payment. In contrary to the well known payment handling packages like cashier or similar we do not support any payment handling. Just the plans with features, subscribing, starting with a trial and pro-rating or going on an grace period and so on.
+The Subscription Manager for Laravel should handle all subscription based stuff without handling any payment. In contrary to the well known payment handling packages like cashier or similar we do not support any payment handling. Just the plans with features, subscribing, starting with a trial and pro-rating or going on an grace period and so on.
 
 For communicating the changes we threw a lot of events and have a toolkit on board including middlewares, blade conditions and other ask-for-feature acceptance services.
 
 What it is not:
 - Handling prices
+- Handling payments
 - Doing a checkout
 - Handling coupons or vouchers
 - Handling marketing data
@@ -23,6 +24,29 @@ What it is:
 - Check paid status of a feature (like a guard) for a given user (or other models)
 - Display subscription with details
 
+## What it is all about?
+
+### Definition
+
+On the definition side you have Features - identified by a slug code. Features are there for control. Think of permissions or an access right for a secured part of your application. Features can be virtually grouped by a Plan - but do not have to.
+
+Because we handle no prices, you do not have to have a plan or Feature bundle.
+
+So each Feature can be part in no Plan, one Plan, more Plans or all Plans. A Plan can exist, multiple Plans can exists, but no Plan has to exist. Think of a role in terms of authorization.
+
+### Subscription
+
+A Subscription is loosely coupled to a plan and has a not-linked list of subscribed features. So the loosely coupled Plan is more an informative data link. The list of feature slugs are the important information within the subscription.
+
+A Subscription runs infinite (`ends_at` is null) or until the end date. Additionally you can set a trial period (`trial_ends_at` is not null) end the trial ends at the specified timestamp. Before that you are on a trial.
+
+A Subscription Circle is a virtual object in terms of periods. So a Subscription period is 1 year by default. So each Subscription has a list of Circles, at least one. Each Circle has a maximum of a period length, can be shorter when subscription is cancelled instant.
+
+Subscriptions with an `infinite` period have just on Circle and are not recurring.
+
+[![](https://mermaid.ink/img/eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgICAgICAgRmVhdHVyZSB9by4ub3sgUGxhbiA6IHBsYW5fZmVhdHVyZVxuICAgICAgICAgIFBsYW4gfG8uLm97IFN1YnNjcmlwdGlvbiA6IHN1YnNjcmliZWRfdG9cbiAgICAgICAgICBGZWF0dXJlIHtcbiAgICAgICAgICAgIHN0cmluZyBjb2RlXG4gICAgICAgICAgfVxuICAgICAgICAgIFBsYW4ge1xuICAgICAgICAgICAgc3RyaW5nIG5hbWVcbiAgICAgICAgICB9XG4gICAgICAgICAgU3Vic2NyaXB0aW9uIHtcbiAgICAgICAgICAgIG1vcnBoIHN1YnNjcmliYWJsZVxuICAgICAgICAgICAgYXJyYXlfb2Zfc3RyaW5nIGZlYXR1cmVzXG4gICAgICAgICAgICB0aW1lc3RhbXBfb3JfbnVsbCB0cmlhbF9lbmRzX2F0XG4gICAgICAgICAgICB0aW1lc3RhbXBfb3JfbnVsbCBlbmRzX2F0XG4gICAgICAgICAgfSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In0sInVwZGF0ZUVkaXRvciI6ZmFsc2V9)](https://mermaid-js.github.io/mermaid-live-editor/#/edit/eyJjb2RlIjoiZXJEaWFncmFtXG4gICAgICAgICAgRmVhdHVyZSB9by4ub3sgUGxhbiA6IHBsYW5fZmVhdHVyZVxuICAgICAgICAgIFBsYW4gfG8uLm97IFN1YnNjcmlwdGlvbiA6IHN1YnNjcmliZWRfdG9cbiAgICAgICAgICBGZWF0dXJlIHtcbiAgICAgICAgICAgIHN0cmluZyBjb2RlXG4gICAgICAgICAgfVxuICAgICAgICAgIFBsYW4ge1xuICAgICAgICAgICAgc3RyaW5nIG5hbWVcbiAgICAgICAgICB9XG4gICAgICAgICAgU3Vic2NyaXB0aW9uIHtcbiAgICAgICAgICAgIG1vcnBoIHN1YnNjcmliYWJsZVxuICAgICAgICAgICAgYXJyYXlfb2Zfc3RyaW5nIGZlYXR1cmVzXG4gICAgICAgICAgICB0aW1lc3RhbXBfb3JfbnVsbCB0cmlhbF9lbmRzX2F0XG4gICAgICAgICAgICB0aW1lc3RhbXBfb3JfbnVsbCBlbmRzX2F0XG4gICAgICAgICAgfSIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In0sInVwZGF0ZUVkaXRvciI6ZmFsc2V9)
+
+
 ## Installation
 
 You can install the package via composer:
@@ -31,7 +55,7 @@ You can install the package via composer:
 composer require rokde/laravel-subscription-manager
 ```
 
-You can publish and run the migrations with:
+You have to publish and run the migrations with:
 
 ```bash
 php artisan vendor:publish --provider="Rokde\SubscriptionManager\SubscriptionManagerServiceProvider" --tag="laravel-subscription-manager-migrations"
@@ -45,9 +69,76 @@ php artisan vendor:publish --provider="Rokde\SubscriptionManager\SubscriptionMan
 
 ## Usage
 
+If your subsciption subscribables are your users, then you have to do the following:
+
+1.) Add the `Subscribable` trait to your User model.
+
 ```php
-// coming soon...
+// \App\Models\User
+class User extends \Illuminate\Foundation\Auth\User {
+    use \Rokde\SubscriptionManager\Models\Concerns\Subscribable;
+}
 ```
+
+2.) Use one of the various checks.
+
+### Checking with Middleware
+
+We register a middleware `subscribed` as route middleware.
+
+You can check route access by just looking if your subscribable has an active subscription by using the middleware like so:
+
+```php
+// /routes/web.php
+Route::group(['middleware' => 'subscribed'], function () {
+    // here you can define your premium routes
+});
+```
+
+If you want to be a bit more concrete, you can ask if your subscribable has an active subscription to a feature like so:
+
+```php
+// /routes/web.php
+Route::group(['middleware' => 'subscribed:track-time'], function () {
+    // here you can define your routes for all users which have subscribed to a feature "track-time"
+});
+```
+
+
+### Getting all subscribed features
+
+You can retrieve an array of all subscribed features.
+
+```php
+// @var \App\Models\User|\App\Models\Team $subscribable
+$allFeatures = $subscribable->subscribedFeatures(); // ['feature-1', 'feature-2']
+```
+
+
+### Retrieving a different Subscribable
+
+By default a subscribable is always the `Auth::user()`. But you can change that behaviour by registering another closure in your AppServiceProvider.
+
+Maybe you are using JetStream or another team-based subscription subscribable option then do it like so:
+
+```php
+// \App\Providers\AppServiceProvider::register()
+\Rokde\SubscriptionManager\SubscribableResolver::resolveSubscribable(function () {
+    return optional(\Illuminate\Support\Facades\Auth::user())->currentTeam;
+});
+```
+
+And now you can add the `Subscribable` trait to your Team model:
+
+```php
+// \App\Models\Team
+class Team extends \Laravel\Jetstream\Team {
+    use \Rokde\SubscriptionManager\Models\Concerns\Subscribable;
+}
+```
+
+Now you can use one of the various checks.
+
 
 ## Testing
 
