@@ -189,4 +189,33 @@ class Subscription extends Model
         $query->whereNull('ends_at')
             ->orWhere('ends_at', '<=', Carbon::now()->toDateTimeString());
     }
+
+    /**
+     * @return array|\Rokde\SubscriptionManager\Models\SubscriptionCircle[]
+     */
+    public function circles(): array
+    {
+        $circles = [];
+
+        $startDate = $this->created_at->clone();
+        $interval = $this->periodLength();
+        $hardEndDate = $this->ends_at;
+
+        do {
+            $endDate = $startDate->clone()->add($interval);
+            if ($hardEndDate !== null && $endDate->greaterThan($hardEndDate)) {
+                $endDate = $hardEndDate->clone();
+            }
+
+            $circles[] = new SubscriptionCircle($this, $startDate->clone(), $endDate->clone(), count($circles)+1);
+
+            //  prepare for next run
+            $startDate = $endDate->clone();
+        } while (
+            ($hardEndDate === null && $endDate->isPast())
+            || ($hardEndDate && $hardEndDate->greaterThan($endDate))
+        );
+
+        return $circles;
+    }
 }

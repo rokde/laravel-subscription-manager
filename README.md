@@ -103,7 +103,17 @@ $builder->periodLength('P1M')   // set period length to a month (default is 1 ye
 
 See headlines below
 
-4.) Cancel a subscription
+4.) Ask any information on a subscription
+
+A Subscription can have a relation to a plan. It should have a list of features - but an empty array is good too. You can get an array of Subscription Circles for a Subscription. Each Subscription Circle represents a period within the subscription.
+
+```php
+$subscription->circles(); // resolves a list of SubscriptionCircles 
+```
+
+Each Subscription Circle has a relation to the subscription, its own start and end date. You can get an interval and the indexed number (1-based) of a circle. It respects the end of a subscription in past or future. The last Subscription Circle on active Subscriptions will have the current timestamp within its borders. So you have to add Circles on your own, when you want to go into the future.
+
+5.) Cancel a subscription
 
 Subscriptions can be cancelled in a few ways, all provided in the `\Rokde\SubscriptionManager\Models\Concerns\HandlesCancellation` trait.
 
