@@ -164,13 +164,13 @@ class Subscription extends Model
     public function scopeOnTrial(Builder $query)
     {
         $query->whereNotNull('trial_ends_at')
-            ->where('trial_ends_at', '>', Carbon::now());
+            ->where('trial_ends_at', '>', Carbon::now()->toDateTimeString());
     }
 
     public function scopeNotOnTrial(Builder $query)
     {
         $query->whereNull('trial_ends_at')
-            ->orWhere('trial_ends_at', '<=', Carbon::now());
+            ->orWhere('trial_ends_at', '<=', Carbon::now()->toDateTimeString());
     }
 
     public function onGracePeriod(): bool
@@ -181,12 +181,12 @@ class Subscription extends Model
     public function scopeOnGracePeriod(Builder $query)
     {
         $query->whereNotNull('ends_at')
-            ->where('ends_at', '>', Carbon::now());
+            ->where('ends_at', '>', Carbon::now()->toDateTimeString());
     }
 
     public function scopeNotOnGracePeriod(Builder $query)
     {
         $query->whereNull('ends_at')
-            ->orWhere('ends_at', '<=', Carbon::now());
+            ->orWhere('ends_at', '<=', Carbon::now()->toDateTimeString());
     }
 }
