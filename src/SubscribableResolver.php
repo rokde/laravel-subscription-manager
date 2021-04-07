@@ -15,7 +15,7 @@ class SubscribableResolver
     }
 
     /**
-     * @return \Illuminate\Contracts\Auth\Authenticatable|\Illuminate\Database\Eloquent\Model|\Rokde\SubscriptionManager\Models\Concerns\|null
+     * @return \Illuminate\Contracts\Auth\Authenticatable|\Illuminate\Database\Eloquent\Model|\Rokde\SubscriptionManager\Models\Concerns\Subscribable|null
      */
     public static function subscribable()
     {
