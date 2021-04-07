@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Rokde\SubscriptionManager\Http\Middleware\Subscribed;
 use Rokde\SubscriptionManager\Models\Concerns\Subscribable;
+use Rokde\SubscriptionManager\Models\Subscription;
+use Rokde\SubscriptionManager\SubscribableResolver;
 use Rokde\SubscriptionManager\Tests\TestCase;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -109,9 +111,24 @@ class SubscribedMiddlewareTest extends TestCase
             {
                 $model->setAttribute('subscribable_id', 1);
             }
+
+            public function getMorphClass()
+            {
+                return 'TestUser';
+            }
         };
 
-        $user->newSubscription()->create();
+        /** @var Subscription $subscription */
+        $subscription = Subscription::factory()->create([
+            'subscribable_type' => 'TestUser',
+            'subscribable_id' => $user->id,
+            'trial_ends_at' => null,
+            'ends_at' => null,
+        ]);
+
+        SubscribableResolver::resolveSubscribable(function () use ($user) {
+            return $user;
+        });
 
         $this->actingAs($user);
 
