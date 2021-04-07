@@ -19,10 +19,10 @@ class Subscribed
      */
     public function handle(Request $request, Closure $next, ?string $feature = null)
     {
-        $user = SubscribableResolver::subscribable();
-        if (! $user
-            || ! method_exists($user, 'subscribed')
-            || ! $user->subscribed($feature)) {
+        $subscribable = SubscribableResolver::subscribable();
+        if (! $subscribable
+            || ! method_exists($subscribable, 'subscribed')
+            || ! $subscribable->subscribed($feature)) {
             throw new AccessDeniedHttpException();
         }
 
