@@ -21,6 +21,7 @@ use Rokde\SubscriptionManager\Models\Concerns\HandlesCancellation;
  * @property int $subscribable_id
  * @property int|null $plan_id
  * @property array $features
+ * @property string|null $period
  * @property Carbon|null $trial_ends_at
  * @property Carbon|null $ends_at
  * @property Carbon $created_at
@@ -90,7 +91,12 @@ class Subscription extends Model
      */
     public function periodLength(): CarbonInterval
     {
-        return CarbonInterval::year(1);
+        return new CarbonInterval($this->period ?? 'P1000Y');
+    }
+
+    public function isInfinite(): bool
+    {
+        return $this->period === null;
     }
 
     public function valid(): bool
@@ -115,12 +121,14 @@ class Subscription extends Model
 
     public function recurring(): bool
     {
-        return ! $this->onTrial() && ! $this->cancelled();
+        return $this->period !== null && ! $this->onTrial() && ! $this->cancelled();
     }
 
     public function scopeRecurring(Builder $query)
     {
-        $query->notOnTrial()->noCancelled();
+        $query->notOnTrial()
+            ->noCancelled()
+            ->whereNotNull('period');
     }
 
     public function cancelled(): bool

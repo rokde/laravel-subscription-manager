@@ -21,7 +21,9 @@ trait HandlesCancellation
 
         $endsAt = $this->onTrial()
             ? $this->trial_ends_at
-            : $this->nextPeriod();
+            : ($this->isInfinite()
+                ? Carbon::now()
+                : $this->nextPeriod());
 
         return $this->cancelAt($endsAt);
     }

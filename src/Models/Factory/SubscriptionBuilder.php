@@ -2,6 +2,7 @@
 
 namespace Rokde\SubscriptionManager\Models\Factory;
 
+use Carbon\CarbonInterval;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -16,6 +17,7 @@ class SubscriptionBuilder
     protected ?int $trialDays = null;
     protected bool $skipTrial = false;
     protected array $features = [];
+    protected ?string $period = 'P1Y';
 
     public function __construct(Model $subscribable, ?Plan $plan = null)
     {
@@ -57,6 +59,28 @@ class SubscriptionBuilder
         return $this;
     }
 
+    public function infinitePeriod(): self
+    {
+        $this->period = null;
+
+        return $this;
+    }
+
+    /**
+     * @param \DateInterval|string $period
+     * @return $this
+     */
+    public function periodLength($period): self
+    {
+        if ($period instanceof \DateInterval) {
+            $period = CarbonInterval::getDateIntervalSpec($period);
+        }
+
+        $this->period = $period;
+
+        return $this;
+    }
+
     public function create(): Subscription
     {
         return $this->subscribable->subscriptions()->create([
@@ -64,6 +88,7 @@ class SubscriptionBuilder
                 ? $this->plan->getKey()
                 : null,
             'features' => $this->features,
+            'period' => $this->period,
             'trial_ends_at' => $this->getTrialEnd(),
             'ends_at' => null,
         ]);
@@ -74,7 +99,7 @@ class SubscriptionBuilder
         return $this->skipTrial
             ? null
             : (
-                $this->trialDays !== null
+            $this->trialDays !== null
                 ? Carbon::now()->addDays($this->trialDays)
                 : null
             );

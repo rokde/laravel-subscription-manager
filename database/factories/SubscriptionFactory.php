@@ -16,6 +16,7 @@ class SubscriptionFactory extends Factory
             'subscribable_id' => 1,
             'plan_id' => null,
             'features' => ['feature-1', 'feature-2'],
+            'period' => 'P1Y',
         ];
     }
 }

@@ -13,6 +13,7 @@ class CreateSubscriptionsTable extends Migration
             $table->morphs('subscribable');
             $table->foreignId('plan_id')->nullable()->constrained();
             $table->longtext('features')->nullable()->default(null);
+            $table->string('period', 32)->nullable()->default(null);
             $table->timestamp('trial_ends_at')->nullable()->default(null);
             $table->timestamp('ends_at')->nullable()->default(null);
             $table->softDeletes();

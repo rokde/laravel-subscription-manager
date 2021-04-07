@@ -80,7 +80,40 @@ class User extends \Illuminate\Foundation\Auth\User {
 }
 ```
 
-2.) Use one of the various checks.
+2.) Subscribe something
+
+```php
+//  using the SubscriptionBuilder, presented by Subscribable trait
+/** @var \Rokde\SubscriptionManager\Models\Factory\SubscriptionBuilder $builder */
+$builder = $user->newSubscription();    // without any plan
+// or
+$plan = \Rokde\SubscriptionManager\Models\Plan::byName('Superior');
+$builder = $user->newSubscription($plan);    // subscribing to a plan -> the list of features will be taken from the plan
+// or
+$builder = $user->newFeatureSubscription(['feature-1', 'feature-2']);    // just a list of features, must not exist in database
+
+$builder->periodLength('P1M')   // set period length to a month (default is 1 year)
+    ->infinitePeriod()          // or set an infinite period
+    ->trialDays(30)             // set 30 days for trial
+    ->skipTrial()               // or skip trial (default)
+    ->create();                 // and create a subscription
+```
+
+3.) Use one of the various checks.
+
+See headlines below
+
+4.) Cancel a subscription
+
+Subscriptions can be cancelled in a few ways, all provided in the `\Rokde\SubscriptionManager\Models\Concerns\HandlesCancellation` trait.
+
+```php
+$user->subscription->cancel();              // cancel at the end of the current circle or at the end of the trial when you are on a trial
+// or
+$user->subscription->cancelNow();           // cancel just right now
+// or
+$user->subscription->cancelAt($datetime);   // cancel at a concrete time
+```
 
 ### Checking with Middleware
 

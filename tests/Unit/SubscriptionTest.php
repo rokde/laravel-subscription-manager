@@ -3,6 +3,7 @@
 namespace Rokde\SubscriptionManager\Tests\Unit;
 
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Rokde\SubscriptionManager\Models\Plan;
 use Rokde\SubscriptionManager\Models\Subscription;
 use Rokde\SubscriptionManager\Tests\TestCase;
@@ -111,5 +112,31 @@ class SubscriptionTest extends TestCase
         $this->assertEquals($planA->getKey(), $subscription->plan->getKey());
         $this->assertInstanceOf(Subscription::class, $planA->subscriptions->first());
         $this->assertEquals($planA->subscriptions->first()->getKey(), $subscription->getKey());
+    }
+
+    /** @test */
+    public function a_test_has_one_year_as_default_period_length()
+    {
+        /** @var Subscription $subscription */
+        $subscription = Subscription::factory()->create([
+            'trial_ends_at' => null,
+            'ends_at' => Carbon::now()->subDay(),
+        ]);
+
+        $this->assertEquals(CarbonInterval::year(1), $subscription->periodLength());
+    }
+
+    /** @test */
+    public function a_subscription_can_be_infinite()
+    {
+        /** @var Subscription $subscription */
+        $subscription = Subscription::factory()->create([
+            'period' => null,
+            'trial_ends_at' => null,
+            'ends_at' => Carbon::now()->subDay(),
+        ]);
+
+        $this->assertFalse($subscription->recurring());
+        $this->assertEquals(CarbonInterval::years(1000), $subscription->periodLength());
     }
 }
