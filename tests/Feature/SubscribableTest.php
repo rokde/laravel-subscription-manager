@@ -2,6 +2,7 @@
 
 namespace Rokde\SubscriptionManager\Tests\Feature;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Rokde\SubscriptionManager\Models\Concerns\Subscribable;
 use Rokde\SubscriptionManager\Models\Factory\SubscriptionBuilder;
@@ -107,6 +108,7 @@ class SubscribableTest extends TestCase
 
         $this->assertCount(1, $model->subscriptions);
         $this->assertEquals($model->subscription()->first()->getKey(), $subscription->getKey());
+        $this->assertEquals(['f1', 'f2'], $model->subscribedFeatures());
 
         $this->assertCount(2, $subscription->features);
         $this->assertTrue($subscription->hasFeature('f1'));
@@ -119,5 +121,54 @@ class SubscribableTest extends TestCase
         $this->assertTrue($subscription->active());
         $this->assertTrue($subscription->recurring());
         $this->assertFalse($subscription->ended());
+    }
+
+    /** @test */
+    public function it_can_merge_two_subscriptions()
+    {
+        $model = new class extends Model {
+            use Subscribable;
+
+            public function __construct(array $attributes = [])
+            {
+                parent::__construct($attributes);
+
+                $this->id = 1;
+            }
+        };
+
+        /** @var SubscriptionBuilder $builder */
+        $model->newFeatureSubscription(['f1'])->create();
+        $model->newFeatureSubscription(['f3', 'f2'])->create();
+
+        $this->assertEquals(['f1', 'f2', 'f3'], $model->subscribedFeatures());
+    }
+
+    /** @test */
+    public function it_respects_only_active_subscriptions()
+    {
+        $model = new class extends Model {
+            use Subscribable;
+
+            public function __construct(array $attributes = [])
+            {
+                parent::__construct($attributes);
+
+                $this->id = 1;
+            }
+        };
+
+        /** @var Subscription $active */
+        $active = $model->newFeatureSubscription(['f1'])->create();
+        /** @var Subscription $inactive */
+        $inactive = $model->newFeatureSubscription(['f3', 'f2'])->create();
+        $inactive->update([
+            'ends_at' => Carbon::now()->subDay(),
+        ]);
+
+        $this->assertEquals(['f1'], $model->subscribedFeatures());
+        $this->assertEquals($active->getKey(), $model->activeSubscriptions->first()->getKey());
+        $this->assertEquals($inactive->getKey(), $model->subscriptions[0]->getKey());
+        $this->assertEquals($active->getKey(), $model->subscriptions[1]->getKey());
     }
 }
