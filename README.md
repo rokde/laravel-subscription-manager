@@ -252,6 +252,19 @@ The following events gets dispatched:
 - `\Rokde\SubscriptionManager\Events\SubscriptionRestored` when a soft-deleted subscription gets restored
 
 
+## Insights
+
+### Customer Insights
+
+You have to use the `Rokde\SubscriptionManager\Insights\Customer`.
+
+You can get the following customer insights:
+- Which are the customers within a period or the current timestamp?
+- Which customers will churn in a given period?
+
+Usually rolling 30 days or monthly periods are used for checking the indicators.
+
+
 ## Testing
 
 ```bash
