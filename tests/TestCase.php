@@ -3,6 +3,8 @@
 namespace Rokde\SubscriptionManager\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Rokde\SubscriptionManager\SubscriptionManagerServiceProvider;
 
@@ -32,6 +34,11 @@ class TestCase extends Orchestra
             'database' => ':memory:',
             'prefix' => '',
         ]);
+
+        Schema::create('test_users', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+        });
 
         include_once __DIR__.'/../database/migrations/create_features_table.php.stub';
         (new \CreateFeaturesTable())->up();
