@@ -118,6 +118,7 @@ class Subscription extends Model
      * default: 1 year
      *
      * @return \Carbon\CarbonInterval
+     * @throws \Exception
      */
     public function periodLength(): CarbonInterval
     {
