@@ -67,6 +67,9 @@ You can publish the config file with:
 php artisan vendor:publish --provider="Rokde\SubscriptionManager\SubscriptionManagerServiceProvider" --tag="laravel-subscription-manager-config"
 ```
 
+You can configure the following parts (documentation is inside the shipped configuration file):
+- middleware
+
 ## Usage
 
 If your subsciption subscribables are your users, then you have to do the following:
@@ -127,7 +130,7 @@ $user->subscription->cancelAt($datetime);   // cancel at a concrete time
 
 ### Checking with Middleware
 
-We register a middleware `subscribed` as route middleware.
+We register a middleware `subscribed` as route middleware. You can change that by publishing config and modify the `subscription-manager::middleware` config key.
 
 You can check route access by just looking if your subscribable has an active subscription by using the middleware like so:
 
