@@ -5,6 +5,22 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/rokde/laravel-subscription-manager/Check%20&%20fix%20styling?label=code%20style)](https://github.com/rokde/laravel-subscription-manager/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/rokde/laravel-subscription-manager.svg?style=flat-square)](https://packagist.org/packages/rokde/laravel-subscription-manager)
 
+**NOT READY TO USE IN PRODUCTION ENVIRONMENTS**
+
+# OPEN TODOS
+
+[ ] Throwing subscription events: create, cancel, ended, update, cycle, ...
+[ ] Metered features: limit numeric usages of a feature: just 10 customers can be managed
+    - with limiting on checking subscribed
+    - with upgrading possibility
+    - with events: quota-reached, quota-exceeded
+[ ] Insights: 
+    - partition plans
+    - partition features
+    - ratio subscribed vs unsubscribed
+    - histogram subscriptions
+    - average length of subscriptions
+
 The Subscription Manager for Laravel should handle all subscription based stuff without handling any payment. In contrary to the well known payment handling packages like cashier or similar we do not support any payment handling. Just the plans with features, subscribing, starting with a trial and pro-rating or going on an grace period and so on.
 
 For communicating the changes we threw a lot of events and have a toolkit on board including middlewares, blade conditions and other ask-for-feature acceptance services.
@@ -217,6 +233,24 @@ Now you can use one of the various checks.
 ```bash
 composer test
 ```
+
+## FAQ
+
+**Q** Why don't you use any model-relation between a subscription and the feature models?
+
+**A** The tables for plans and features are just for the selling side of a subscription. You can use this structure yourself by filling these tables with your set of packages and features. But you don't have to to subscribe a user to a set of features.
+
+Your business model can by selling subscriptions on a team level, but you can offer a personal feature to each user, which a user can subscribe to - no matter what the team has features for. So you do not have to struggle if this feature will be already on a plan or in your selling page.
+
+Example: you have an HR app and you can sell a company-wide subscription to give all employees access to your app, billed by the company. A team of users want to track their own private todo list. Now you can subscribe these users to a special feature - like unlocking a special menu item.
+
+**Q** Why don't you handle prices on plans or features or subscriptions?
+
+**A** Because it is hard having prices in a world-wide usable package. You have various prices (with tax, without tax, including fees, various currencies, exchange rates, ...).
+
+Add fields to the shipped migrations (tables) and inherit from the package models to suit your needs for handling price and currency. Sometimes it is easier to display prices just on a marketing page in html, than to have time-related multi-currency prices with or without taxes displayed for personal users or business customers.
+
+Maybe it is better to tell a few USP features on the marketing selling page, but to have atomic features to handle subscription access even for crud operations - like a permission-based app.
 
 ## Changelog
 
