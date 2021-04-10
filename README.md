@@ -9,7 +9,7 @@
 
 # OPEN TODOS
 
-- [ ] Throwing subscription events: create, cancel, ended, update, cycle, resume, ...
+- [ ] Throwing subscription lifecycle events: ended, cycle, ...
 
 - [ ] Metered features: limit numeric usages of a feature: just 10 customers can be managed
     - with limiting on checking subscribed
@@ -237,6 +237,19 @@ class Team extends \Laravel\Jetstream\Team {
 ```
 
 Now you can use one of the various checks.
+
+## Events
+
+You can listen on various events during the subscription lifecycle.
+
+The following events gets dispatched:
+- `\Rokde\SubscriptionManager\Events\SubscriptionCreated` when a subscription gets created
+- `\Rokde\SubscriptionManager\Events\SubscriptionCanceled` when a subscription gets cancelled
+- `\Rokde\SubscriptionManager\Events\SubscriptionResumed` when a cancelled subscription gets resumed
+- `\Rokde\SubscriptionManager\Events\SubscriptionUpdated` when a subscription gets updated
+- `\Rokde\SubscriptionManager\Events\SubscriptionDeleted` when a subscription gets deleted (it is soft deleted)
+- `\Rokde\SubscriptionManager\Events\SubscriptionPurged` when a subscription gets finally removed
+- `\Rokde\SubscriptionManager\Events\SubscriptionRestored` when a soft-deleted subscription gets restored
 
 
 ## Testing

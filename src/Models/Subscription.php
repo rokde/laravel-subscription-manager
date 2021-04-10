@@ -10,6 +10,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Rokde\SubscriptionManager\Events\SubscriptionCanceled;
+use Rokde\SubscriptionManager\Events\SubscriptionCreated;
+use Rokde\SubscriptionManager\Events\SubscriptionDeleted;
+use Rokde\SubscriptionManager\Events\SubscriptionPurged;
+use Rokde\SubscriptionManager\Events\SubscriptionRestored;
+use Rokde\SubscriptionManager\Events\SubscriptionResumed;
+use Rokde\SubscriptionManager\Events\SubscriptionUpdated;
 use Rokde\SubscriptionManager\Models\Concerns\HandlesCancellation;
 
 /**
@@ -52,6 +59,29 @@ class Subscription extends Model
         'ends_at' => 'datetime',
         'features' => 'array',
     ];
+
+    protected $dispatchesEvents = [
+        'cancelled' => SubscriptionCanceled::class,
+        'created' => SubscriptionCreated::class,
+        'deleted' => SubscriptionDeleted::class,
+        'forceDeleted' => SubscriptionPurged::class,
+        'restored' => SubscriptionRestored::class,
+        'resumed' => SubscriptionResumed::class,
+        'updated' => SubscriptionUpdated::class,
+    ];
+
+    protected static function booted()
+    {
+        static::updated(function (Subscription $subscription) {
+            if ($subscription->isDirty('ends_at')) {
+                if ($subscription->getAttribute('ends_at') !== null) {
+                    $subscription->fireCustomModelEvent('cancelled', 'dispatch');
+                } else {
+                    $subscription->fireCustomModelEvent('resumed', 'dispatch');
+                }
+            }
+        });
+    }
 
     public function subscribable(): MorphTo
     {
@@ -121,7 +151,7 @@ class Subscription extends Model
 
     public function recurring(): bool
     {
-        return $this->period !== null && ! $this->onTrial() && ! $this->cancelled();
+        return $this->period !== null && !$this->onTrial() && !$this->cancelled();
     }
 
     public function scopeRecurring(Builder $query)
@@ -148,7 +178,7 @@ class Subscription extends Model
 
     public function ended(): bool
     {
-        return $this->cancelled() && ! $this->onGracePeriod();
+        return $this->cancelled() && !$this->onGracePeriod();
     }
 
     public function scopeEnded(Builder $query)
