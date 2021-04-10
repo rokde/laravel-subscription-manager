@@ -9,12 +9,14 @@
 
 # OPEN TODOS
 
-[ ] Throwing subscription events: create, cancel, ended, update, cycle, ...
-[ ] Metered features: limit numeric usages of a feature: just 10 customers can be managed
+- [ ] Throwing subscription events: create, cancel, ended, update, cycle, ...
+
+- [ ] Metered features: limit numeric usages of a feature: just 10 customers can be managed
     - with limiting on checking subscribed
     - with upgrading possibility
     - with events: quota-reached, quota-exceeded
-[ ] Insights: 
+
+- [ ] Insights: 
     - partition plans
     - partition features
     - ratio subscribed vs unsubscribed
