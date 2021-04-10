@@ -21,20 +21,7 @@ use Rokde\SubscriptionManager\Models\Subscription;
  */
 trait Subscribable
 {
-    public function newSubscription(?Plan $plan = null): SubscriptionBuilder
-    {
-        return new SubscriptionBuilder($this, $plan);
-    }
-
-    /**
-     * @param @param array|string[]|\Illuminate\Database\Eloquent\Collection|\Rokde\SubscriptionManager\Models\Feature[] $features
-     * @return \Rokde\SubscriptionManager\Models\Factory\SubscriptionBuilder
-     */
-    public function newFeatureSubscription($features): SubscriptionBuilder
-    {
-        return (new SubscriptionBuilder($this))
-            ->withFeatures($features);
-    }
+    use HandlesSubscriptionsCreation;
 
     public function subscriptions(): MorphMany
     {
@@ -54,6 +41,14 @@ trait Subscribable
         return $this->morphOne(Subscription::class, 'subscribable')
             ->active()
             ->latest('id');
+    }
+
+    public function everSubscribed($feature = null): bool
+    {
+        return $this->subscriptions
+                ->first(function (Subscription $subscription) use ($feature) {
+                    return $feature === null || $subscription->hasFeature($feature);
+                }) !== null;
     }
 
     /**

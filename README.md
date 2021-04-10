@@ -150,6 +150,18 @@ Route::group(['middleware' => 'subscribed:track-time'], function () {
 });
 ```
 
+### Checking on the Subscribable
+
+```php
+// @var \App\Models\User|\App\Models\Team $subscribable
+//  just currently active subscriptions
+$hasAnyActiveSubscription = $subscribable->subscribed();
+$isActivelySubscribedToAConcreteFeature = $subscribable->subscribed('feature-1');
+
+//  active and past subscriptions
+$hasAnySubscriptionEver = $subscribable->everSubscribed();
+$wasSubscribedToAConcreteFeature = $subscribable->everSubscribed('feature-1');
+```
 
 ### Getting all subscribed features
 
