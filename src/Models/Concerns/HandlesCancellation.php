@@ -62,7 +62,7 @@ trait HandlesCancellation
 
     public function resume(): self
     {
-        if (!$this->onGracePeriod()) {
+        if (! $this->onGracePeriod()) {
             return $this;
         }
 
