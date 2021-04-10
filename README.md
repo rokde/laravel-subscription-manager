@@ -9,7 +9,7 @@
 
 # OPEN TODOS
 
-- [ ] Throwing subscription events: create, cancel, ended, update, cycle, ...
+- [ ] Throwing subscription events: create, cancel, ended, update, cycle, resume, ...
 
 - [ ] Metered features: limit numeric usages of a feature: just 10 customers can be managed
     - with limiting on checking subscribed
@@ -136,7 +136,7 @@ $builder->periodLength('P1M')   // set period length to a month (default is 1 ye
 
 3.) Use one of the various checks.
 
-See headlines below
+See [Checking chapter](#checking) below.
 
 4.) Ask any information on a subscription
 
@@ -160,7 +160,16 @@ $user->subscription->cancelNow();           // cancel just right now
 $user->subscription->cancelAt($datetime);   // cancel at a concrete time
 ```
 
-### Checking with Middleware
+6.) Resume a cancelled subscription
+
+```php
+$user->subscription->resume();  // resume a cancelled subscription within grace period
+```
+
+
+### Checking
+
+#### Checking with Middleware
 
 We register a middleware `subscribed` as route middleware. You can change that by publishing config and modify the `subscription-manager::middleware` config key.
 
@@ -182,7 +191,7 @@ Route::group(['middleware' => 'subscribed:track-time'], function () {
 });
 ```
 
-### Checking on the Subscribable
+#### Checking on the Subscribable
 
 ```php
 // @var \App\Models\User|\App\Models\Team $subscribable
@@ -195,7 +204,7 @@ $hasAnySubscriptionEver = $subscribable->everSubscribed();
 $wasSubscribedToAConcreteFeature = $subscribable->everSubscribed('feature-1');
 ```
 
-### Getting all subscribed features
+#### Getting all subscribed features
 
 You can retrieve an array of all subscribed features.
 

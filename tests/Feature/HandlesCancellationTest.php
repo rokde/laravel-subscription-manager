@@ -107,4 +107,42 @@ class HandlesCancellationTest extends TestCase
         $this->assertEquals($endsAt->toDateTimeString(), $subscription->ends_at->toDateTimeString());
         $this->assertTrue($subscription->isInfinite());
     }
+
+    /** @test */
+    public function it_can_resume_a_cancelled_subscription()
+    {
+        /** @var Subscription $subscription */
+        $subscription = Subscription::factory()->create([
+            'trial_ends_at' => null,
+            'ends_at' => null,
+        ]);
+
+        $subscription->cancel();
+
+        $this->assertTrue($subscription->cancelled());
+        $this->assertTrue($subscription->onGracePeriod());
+
+        $subscription->resume();
+
+        $this->assertFalse($subscription->cancelled());
+    }
+
+    /** @test */
+    public function it_can_resume_a_cancelled_subscription_just_within_grace_period()
+    {
+        /** @var Subscription $subscription */
+        $subscription = Subscription::factory()->create([
+            'trial_ends_at' => null,
+            'ends_at' => null,
+        ]);
+
+        $subscription->cancelAt(now()->subMinute());
+
+        $this->assertTrue($subscription->cancelled());
+        $this->assertFalse($subscription->onGracePeriod());
+
+        $subscription->resume();
+
+        $this->assertTrue($subscription->cancelled());
+    }
 }

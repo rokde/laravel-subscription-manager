@@ -42,6 +42,10 @@ trait HandlesCancellation
         return $this;
     }
 
+    /**
+     * Start of the next period begin (or used at end of current cycle)
+     * @return \Illuminate\Support\Carbon
+     */
     public function nextPeriod(): Carbon
     {
         /** @var Carbon $endsAt */
@@ -54,5 +58,18 @@ trait HandlesCancellation
         }
 
         return $endsAt;
+    }
+
+    public function resume(): self
+    {
+        if (!$this->onGracePeriod()) {
+            return $this;
+        }
+
+        $this->forceFill([
+            'ends_at' => null,
+        ])->save();
+
+        return $this;
     }
 }
