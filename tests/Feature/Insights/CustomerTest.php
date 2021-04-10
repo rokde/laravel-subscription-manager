@@ -3,7 +3,6 @@
 namespace Rokde\SubscriptionManager\Tests\Feature\Insights;
 
 use Rokde\SubscriptionManager\Insights\Customer;
-use Rokde\SubscriptionManager\Models\Subscription;
 use Rokde\SubscriptionManager\Tests\TestCase;
 use Rokde\SubscriptionManager\Tests\TestUser;
 
