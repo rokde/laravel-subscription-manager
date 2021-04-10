@@ -35,7 +35,7 @@ class SubscriptionManagerServiceProvider extends PackageServiceProvider
         /** @var \Illuminate\Config\Repository $config */
         $config = $this->app->make('config');
         $middleware = $config->get('subscription-manager::middleware');
-        if (!$middleware) {
+        if (! $middleware) {
             return;
         }
 

@@ -5,9 +5,6 @@ namespace Rokde\SubscriptionManager\Tests\Feature;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Rokde\SubscriptionManager\Models\Concerns\Subscribable;
-use Rokde\SubscriptionManager\Models\Factory\SubscriptionBuilder;
-use Rokde\SubscriptionManager\Models\Feature;
-use Rokde\SubscriptionManager\Models\Plan;
 use Rokde\SubscriptionManager\Models\Subscription;
 use Rokde\SubscriptionManager\Tests\TestCase;
 

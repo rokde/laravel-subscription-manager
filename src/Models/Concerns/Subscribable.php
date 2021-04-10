@@ -4,7 +4,6 @@ namespace Rokde\SubscriptionManager\Models\Concerns;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Rokde\SubscriptionManager\Models\Factory\SubscriptionBuilder;
 use Rokde\SubscriptionManager\Models\Plan;
 use Rokde\SubscriptionManager\Models\Subscription;
 
