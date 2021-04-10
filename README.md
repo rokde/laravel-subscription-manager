@@ -26,6 +26,20 @@ What it is:
 
 ## What it is all about?
 
+### Glossary
+
+**Subscribable** is an Entity which can subscribe to a set of features.
+> In the real world it would be a human, which pays money for getting access to something premium.
+
+**Subscription** is the relation between a Subscribable and its limited access granted to a set of features.
+> In the real world it would be a contract with a time-limit and a recurrence definition, like a cellphone contract.
+
+**Feature** is a name of a premium area or premium function not every user has access to.
+> In the real world you get an access key to a hidden level.
+
+**Plan** is a virtual composition of a set of Features.
+> In the real world is a Plan the Package S, M or L with access to a few, more or all functions.
+
 ### Definition
 
 On the definition side you have Features - identified by a slug code. Features are there for control. Think of permissions or an access right for a secured part of your application. Features can be virtually grouped by a Plan - but do not have to.
