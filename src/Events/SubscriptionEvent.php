@@ -9,7 +9,9 @@ use Rokde\SubscriptionManager\Models\Subscription;
 
 trait SubscriptionEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     public Subscription $subscription;
 

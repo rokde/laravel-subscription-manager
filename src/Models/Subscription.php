@@ -151,7 +151,7 @@ class Subscription extends Model
 
     public function recurring(): bool
     {
-        return $this->period !== null && !$this->onTrial() && !$this->cancelled();
+        return $this->period !== null && ! $this->onTrial() && ! $this->cancelled();
     }
 
     public function scopeRecurring(Builder $query)
@@ -178,7 +178,7 @@ class Subscription extends Model
 
     public function ended(): bool
     {
-        return $this->cancelled() && !$this->onGracePeriod();
+        return $this->cancelled() && ! $this->onGracePeriod();
     }
 
     public function scopeEnded(Builder $query)
