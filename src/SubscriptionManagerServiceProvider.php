@@ -23,7 +23,7 @@ class SubscriptionManagerServiceProvider extends PackageServiceProvider
             ->hasCommand(PlansListCommand::class);
     }
 
-    public function packageBooted()
+    public function packageBooted(): void
     {
         parent::packageBooted();
 
