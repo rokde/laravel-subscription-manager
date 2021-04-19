@@ -3,6 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/rokde/laravel-subscription-manager.svg?style=flat-square)](https://packagist.org/packages/rokde/laravel-subscription-manager)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/rokde/laravel-subscription-manager/run-tests?label=tests)](https://github.com/rokde/laravel-subscription-manager/actions?query=workflow%3ATests+branch%3Amaster)
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/rokde/laravel-subscription-manager/Check%20&%20fix%20styling?label=code%20style)](https://github.com/rokde/laravel-subscription-manager/actions?query=workflow%3A"Check+%26+fix+styling"+branch%3Amaster)
+[![GitHub Super-Linter](https://github.com/rokde/laravel-subscription-manager/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
 [![Total Downloads](https://img.shields.io/packagist/dt/rokde/laravel-subscription-manager.svg?style=flat-square)](https://packagist.org/packages/rokde/laravel-subscription-manager)
 
 **NOT READY TO USE IN PRODUCTION ENVIRONMENTS**
