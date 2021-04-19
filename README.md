@@ -17,13 +17,6 @@
     - with upgrading possibility
     - with events: quota-reached, quota-exceeded
 
-- [ ] Insights: 
-    - partition plans
-    - partition features
-    - ratio subscribed vs unsubscribed
-    - histogram subscriptions
-    - average length of subscriptions
-
 ---
 
 The Subscription Manager for Laravel should handle all subscription based stuff without handling any payment. In contrary to the well known payment handling packages like cashier or similar we do not support any payment handling. Just the plans with features, subscribing, starting with a trial and pro-rating or going on an grace period and so on.
@@ -266,6 +259,31 @@ You can get the following customer insights:
 - Which customers will churn in a given period?
 
 Usually rolling 30 days or monthly periods are used for checking the indicators.
+
+### Subscriptions Histogram
+
+The historical data can be accessed with the `Rokde\SubscriptionManager\Insights\SubscriptionHistory`.
+
+The default use case is to retrieve statistical data grouped by week for the last month.
+
+```php
+$history = new \Rokde\SubscriptionManager\Insights\SubscriptionHistory();
+$histogram = $history->get(); // keyed-map
+```
+
+Each grouped partition has the following data:
+
+```php
+'2021-01-01' => [
+    'start' => '2021-01-01 00:00:00',   // start of period
+    'end' => '2021-02-01 00:00:00',     // end of period
+    'count' => 3,                       // number of subscriptions within the period
+    'new' => 2,                         // newly created subscriptions within the period
+    'trial' => 2,                       // number of subscriptions being on trial within the period
+    'grace' => 2,                       // number of subscriptions being on grace period within the period
+    'ended' => 2,                       // subscriptions finally ended within the period
+],
+```
 
 
 ## Testing
