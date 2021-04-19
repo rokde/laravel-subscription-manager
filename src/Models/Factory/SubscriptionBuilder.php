@@ -19,6 +19,11 @@ class SubscriptionBuilder
     protected array $features = [];
     protected ?string $period = 'P1Y';
 
+    /**
+     * SubscriptionBuilder constructor.
+     * @param \Illuminate\Database\Eloquent\Model $subscribable
+     * @param \Rokde\SubscriptionManager\Models\Plan|null $plan
+     */
     public function __construct(Model $subscribable, ?Plan $plan = null)
     {
         $this->subscribable = $subscribable;
@@ -30,7 +35,9 @@ class SubscriptionBuilder
     }
 
     /**
-     * @param array|string[]|Collection|Feature[] $features
+     * Use the given features
+     *
+     * @param array|string[]|\Illuminate\Database\Eloquent\Collection|\Rokde\SubscriptionManager\Models\Feature[] $features
      * @return $this
      */
     public function withFeatures($features): self
@@ -42,6 +49,12 @@ class SubscriptionBuilder
         return $this;
     }
 
+    /**
+     * set trial days
+     *
+     * @param int $trialDays
+     * @return $this
+     */
     public function trialDays(int $trialDays): self
     {
         $this->trialDays = $trialDays;
@@ -49,6 +62,11 @@ class SubscriptionBuilder
         return $this;
     }
 
+    /**
+     * set trial days to null
+     *
+     * @return $this
+     */
     public function skipTrial(): self
     {
         $this->skipTrial = true;
@@ -59,6 +77,11 @@ class SubscriptionBuilder
         return $this;
     }
 
+    /**
+     * unset period string
+     *
+     * @return $this
+     */
     public function infinitePeriod(): self
     {
         $this->period = null;
@@ -67,6 +90,8 @@ class SubscriptionBuilder
     }
 
     /**
+     * Set period
+     *
      * @param \DateInterval|string $period
      * @return $this
      */
@@ -81,6 +106,11 @@ class SubscriptionBuilder
         return $this;
     }
 
+    /**
+     * Creates the subscription with all values already set
+     *
+     * @return \Rokde\SubscriptionManager\Models\Subscription
+     */
     public function create(): Subscription
     {
         return $this->subscribable->subscriptions()->create([
@@ -94,6 +124,11 @@ class SubscriptionBuilder
         ]);
     }
 
+    /**
+     * Returns trial end with given parameters
+     *
+     * @return \DateTimeInterface|null
+     */
     protected function getTrialEnd(): ?\DateTimeInterface
     {
         return $this->skipTrial

@@ -42,6 +42,12 @@ trait Subscribable
             ->latest('id');
     }
 
+    /**
+     * Was the subscribable ever subscribed? When feature given only subscriptions with this feature will be checked.
+     *
+     * @param null|string|\Rokde\SubscriptionManager\Models\Feature $feature
+     * @return bool
+     */
     public function everSubscribed($feature = null): bool
     {
         return $this->subscriptions
@@ -51,6 +57,8 @@ trait Subscribable
     }
 
     /**
+     * Is the subscribable subscribed? When feature given only subscriptions with this feature will be checked.
+     *
      * @param null|string|\Rokde\SubscriptionManager\Models\Feature $feature
      * @return bool
      */
@@ -78,6 +86,12 @@ trait Subscribable
             ->all();
     }
 
+    /**
+     * Is the subscribable actively subscribed on a plan?
+     *
+     * @param \Rokde\SubscriptionManager\Models\Plan $plan
+     * @return bool
+     */
     public function onPlan(Plan $plan): bool
     {
         return $this->activeSubscriptions()

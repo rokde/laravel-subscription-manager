@@ -93,6 +93,12 @@ class Subscription extends Model
         return $this->belongsTo(Plan::class);
     }
 
+    /**
+     * Does the subscription has a plan assigned
+     *
+     * @param \Rokde\SubscriptionManager\Models\Plan|null $plan
+     * @return bool
+     */
     public function hasPlan(?Plan $plan = null): bool
     {
         return $plan instanceof Plan
@@ -101,6 +107,8 @@ class Subscription extends Model
     }
 
     /**
+     * Does the subscription has a feature assigned
+     *
      * @param string|\Rokde\SubscriptionManager\Models\Feature $feature
      * @return bool
      */
@@ -115,7 +123,7 @@ class Subscription extends Model
 
     /**
      * How long is a normal period on the subscription
-     * default: 1 year
+     * default: 1 year; infinite period is 1000 years
      *
      * @return \Carbon\CarbonInterval
      * @throws \Exception
@@ -125,16 +133,31 @@ class Subscription extends Model
         return new CarbonInterval($this->period ?? 'P1000Y');
     }
 
+    /**
+     * Is the subscription infinite
+     *
+     * @return bool
+     */
     public function isInfinite(): bool
     {
         return $this->period === null;
     }
 
+    /**
+     * Is the subscription valid (active or on trial or on grace period, but not ended)
+     *
+     * @return bool
+     */
     public function valid(): bool
     {
         return $this->active() || $this->onTrial() || $this->onGracePeriod();
     }
 
+    /**
+     * Is the subscription active (not on grace period or not cancelled)
+     *
+     * @return bool
+     */
     public function active(): bool
     {
         return $this->ends_at === null || $this->onGracePeriod();
@@ -150,6 +173,11 @@ class Subscription extends Model
         });
     }
 
+    /**
+     * Is the subscription recurring (circles) (not infinite, not on trial and not cancelled)
+     *
+     * @return bool
+     */
     public function recurring(): bool
     {
         return $this->period !== null && ! $this->onTrial() && ! $this->cancelled();
@@ -162,6 +190,11 @@ class Subscription extends Model
             ->whereNotNull('period');
     }
 
+    /**
+     * Is subscription cancelled (end date set)
+     *
+     * @return bool
+     */
     public function cancelled(): bool
     {
         return $this->ends_at !== null;
@@ -177,6 +210,11 @@ class Subscription extends Model
         $query->whereNull('ends_at');
     }
 
+    /**
+     * Is subscription already ended (cancelled and not on grace period)
+     *
+     * @return bool
+     */
     public function ended(): bool
     {
         return $this->cancelled() && ! $this->onGracePeriod();
@@ -187,6 +225,11 @@ class Subscription extends Model
         $query->cancelled()->notOnGracePeriod();
     }
 
+    /**
+     * Is subscription on trial currently
+     *
+     * @return bool
+     */
     public function onTrial(): bool
     {
         return $this->trial_ends_at && $this->trial_ends_at->isFuture();
@@ -204,6 +247,11 @@ class Subscription extends Model
             ->orWhere('trial_ends_at', '<=', Carbon::now()->toDateTimeString());
     }
 
+    /**
+     * Is subscription on grace period (end date is set and in future)
+     *
+     * @return bool
+     */
     public function onGracePeriod(): bool
     {
         return $this->ends_at && $this->ends_at->isFuture();
@@ -222,6 +270,8 @@ class Subscription extends Model
     }
 
     /**
+     * Returns a subscription circles collection
+     *
      * @return array|\Rokde\SubscriptionManager\Models\SubscriptionCircle[]
      */
     public function circles(): array

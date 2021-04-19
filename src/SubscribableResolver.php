@@ -7,14 +7,21 @@ use Illuminate\Support\Facades\Auth;
 
 class SubscribableResolver
 {
-    private static $subscribableResolver = null;
+    private static ?Closure $subscribableResolver = null;
 
+    /**
+     * Resolve the subscribable with a custom closure
+     *
+     * @param \Closure|null $callback
+     */
     public static function resolveSubscribable(Closure $callback = null): void
     {
         static::$subscribableResolver = $callback;
     }
 
     /**
+     * Returns the subscribable when authenticated
+     *
      * @return \Illuminate\Contracts\Auth\Authenticatable|\Illuminate\Database\Eloquent\Model|\Rokde\SubscriptionManager\Models\Concerns\Subscribable|null
      */
     public static function subscribable()

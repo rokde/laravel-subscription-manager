@@ -11,6 +11,7 @@ class Customer
 {
     /**
      * returns all customers - distinct list of subscribers
+     *
      * @param Carbon\CarbonPeriod|null $period
      * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model[]
      */
@@ -37,6 +38,12 @@ class Customer
             ->values();
     }
 
+    /**
+     * returns all churning customers - distinct list of subscribers
+     *
+     * @param \Carbon\CarbonPeriod $period
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function churnCustomers(CarbonPeriod $period): Collection
     {
         return Subscription::query()

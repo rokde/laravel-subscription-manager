@@ -11,6 +11,9 @@ class Subscribed
 {
     /**
      * Handle an incoming request.
+     * - resolve a subscribable
+     * - does it have the method `subscribed`
+     * - check `subscribed` on subscribable
      *
      * @param \Illuminate\Http\Request $request
      * @param \Closure $next

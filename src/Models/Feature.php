@@ -27,6 +27,12 @@ class Feature extends Model
         'code',
     ];
 
+    /**
+     * Returns a feature by its code
+     *
+     * @param string $code
+     * @return \Rokde\SubscriptionManager\Models\Feature|null
+     */
     public static function byCode(string $code): ?self
     {
         return static::where('code', $code)->first();

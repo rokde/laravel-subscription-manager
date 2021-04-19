@@ -29,6 +29,12 @@ class Plan extends Model
         'name',
     ];
 
+    /**
+     * Returns a plan by name
+     *
+     * @param string $name
+     * @return \Rokde\SubscriptionManager\Models\Plan|null
+     */
     public static function byName(string $name): ?self
     {
         return static::where('name', $name)->first();
