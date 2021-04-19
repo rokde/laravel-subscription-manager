@@ -24,11 +24,14 @@ jobs:
           fetch-depth: 0
 
       - name: Lint Code Base
-        uses: github/super-linter@v3
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: master
-          FILTER_REGEX_INCLUDE: .*src/.*
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_PHP: true
-          VALIDATE_PHP_BUILTIN: true
+        uses: overtrue/phplint@master
+        with:
+          path: src
+#        uses: github/super-linter@v3
+#        env:
+#          VALIDATE_ALL_CODEBASE: false
+#          DEFAULT_BRANCH: master
+#          FILTER_REGEX_INCLUDE: .*src/.*
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          VALIDATE_PHP: true
+#          VALIDATE_PHP_BUILTIN: true
