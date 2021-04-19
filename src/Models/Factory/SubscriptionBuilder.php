@@ -3,10 +3,8 @@
 namespace Rokde\SubscriptionManager\Models\Factory;
 
 use Carbon\CarbonInterval;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Rokde\SubscriptionManager\Models\Feature;
 use Rokde\SubscriptionManager\Models\Plan;
 use Rokde\SubscriptionManager\Models\Subscription;
 
