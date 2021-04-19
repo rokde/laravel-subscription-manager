@@ -24,6 +24,8 @@
     - histogram subscriptions
     - average length of subscriptions
 
+---
+
 The Subscription Manager for Laravel should handle all subscription based stuff without handling any payment. In contrary to the well known payment handling packages like cashier or similar we do not support any payment handling. Just the plans with features, subscribing, starting with a trial and pro-rating or going on an grace period and so on.
 
 For communicating the changes we threw a lot of events and have a toolkit on board including middlewares, blade conditions and other ask-for-feature acceptance services.
