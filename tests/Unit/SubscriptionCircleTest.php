@@ -22,7 +22,10 @@ class SubscriptionCircleTest extends TestCase
 
         $this->assertCount(1, $circles);
         $this->assertInstanceOf(SubscriptionCircle::class, $circle);
+        $this->assertEquals($subscription, $circle->subscription());
         $this->assertEquals('P1Y', $circle->intervalString());
+        $this->assertTrue(now()->isSameDay($circle->start()));
+        $this->assertTrue(now()->addYear()->isSameDay($circle->end()));
     }
 
     /** @test */
@@ -42,6 +45,7 @@ class SubscriptionCircleTest extends TestCase
         $circle = $circles[0];
 
         $this->assertCount(12, $circles);
+        $this->assertEquals($subscription, $circle->subscription());
         $this->assertInstanceOf(SubscriptionCircle::class, $circle);
         $this->assertEquals('P1M', $circle->intervalString());
         $this->assertEquals('10', $circles[9]->number());
