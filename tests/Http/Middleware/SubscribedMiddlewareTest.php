@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Router;
 use Rokde\SubscriptionManager\Http\Middleware\Subscribed;
 use Rokde\SubscriptionManager\Models\Concerns\Subscribable;
 use Rokde\SubscriptionManager\Models\Subscription;
@@ -121,6 +122,9 @@ class SubscribedMiddlewareTest extends TestCase
         });
 
         $this->assertEquals(200, $this->runMiddleware(new Subscribed()));
+
+        $router = $this->app->make(Router::class);
+        $this->assertArrayHasKey('subscribed', $router->getMiddleware());
     }
 
     protected function runMiddleware($middleware, $feature = null)
