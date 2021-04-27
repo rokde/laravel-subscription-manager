@@ -3,6 +3,7 @@
 namespace Rokde\SubscriptionManager\Tests\Feature\Insights;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Rokde\SubscriptionManager\Insights\SubscriptionHistory;
 use Rokde\SubscriptionManager\Tests\TestCase;
 use Rokde\SubscriptionManager\Tests\TestUser;
@@ -143,6 +144,132 @@ class SubscriptionHistoryTest extends TestCase
             'grace' => 2,
             'ended' => 2,
         ], $histogram->get('2021-01-05'));
+    }
+
+    /** @test */
+    public function it_can_display_historical_data_for_subscriptions_partitioned_by_hour()
+    {
+        $testUser = new TestUser(['id' => 1]);
+        $testUser->save();
+        $subscription1 = $testUser->newSubscription()->trialDays(3)->create();
+        $subscription1->update(['created_at' => '2021-01-01 09:00:00']);
+        $subscription1->update(['trial_ends_at' => '2021-01-04 09:00:00']);
+
+        $subscription2 = $testUser->newSubscription()->create();
+        $subscription2->update(['created_at' => '2021-01-04 09:00:00']);
+
+        $subscription1->cancelAt(Carbon::parse('2021-01-05'));
+        $subscription2->cancelAt(Carbon::parse('2021-01-05'));
+
+        $history = (new SubscriptionHistory())
+            ->from(Carbon::parse('2021-01-01 00:00:00'))
+            ->until(Carbon::parse('2021-01-02 00:00:00'))
+            ->groupBy(SubscriptionHistory::PERIOD_HOUR);
+
+        $histogram = $history->get();
+
+        $this->assertEquals([
+            'start' => '2021-01-01 00:00:00',
+            'end' => '2021-01-01 01:00:00',
+            'count' => 0,
+            'new' => 0,
+            'trial' => 0,
+            'grace' => 0,
+            'ended' => 0,
+        ], $histogram->get('2021-01-01 00'));
+        $this->assertEquals([
+            'start' => '2021-01-01 09:00:00',
+            'end' => '2021-01-01 10:00:00',
+            'count' => 1,
+            'new' => 1,
+            'trial' => 1,
+            'grace' => 1,
+            'ended' => 0,
+        ], $histogram->get('2021-01-01 09'));
+    }
+
+    /** @test */
+    public function it_can_display_historical_data_for_subscriptions_partitioned_by_minute()
+    {
+        $testUser = new TestUser(['id' => 1]);
+        $testUser->save();
+        $subscription1 = $testUser->newSubscription()->trialDays(3)->create();
+        $subscription1->update(['created_at' => '2021-01-01 09:00:00']);
+        $subscription1->update(['trial_ends_at' => '2021-01-04 09:00:00']);
+
+        $subscription2 = $testUser->newSubscription()->create();
+        $subscription2->update(['created_at' => '2021-01-04 09:00:00']);
+
+        $subscription1->cancelAt(Carbon::parse('2021-01-05'));
+        $subscription2->cancelAt(Carbon::parse('2021-01-05'));
+
+        $history = (new SubscriptionHistory())
+            ->from(Carbon::parse('2021-01-01 00:00:00'))
+            ->until(Carbon::parse('2021-01-01 09:01:00'))
+            ->groupBy(SubscriptionHistory::PERIOD_MINUTE);
+
+        $histogram = $history->get();
+
+        $this->assertEquals([
+            'start' => '2021-01-01 00:00:00',
+            'end' => '2021-01-01 00:01:00',
+            'count' => 0,
+            'new' => 0,
+            'trial' => 0,
+            'grace' => 0,
+            'ended' => 0,
+        ], $histogram->get('2021-01-01 00:00'));
+        $this->assertEquals([
+            'start' => '2021-01-01 09:00:00',
+            'end' => '2021-01-01 09:01:00',
+            'count' => 1,
+            'new' => 1,
+            'trial' => 1,
+            'grace' => 1,
+            'ended' => 0,
+        ], $histogram->get('2021-01-01 09:00'));
+    }
+
+    /** @test */
+    public function it_can_display_historical_data_for_subscriptions_partitioned_by_year()
+    {
+        $testUser = new TestUser(['id' => 1]);
+        $testUser->save();
+        $subscription1 = $testUser->newSubscription()->trialDays(3)->create();
+        $subscription1->update(['created_at' => '2021-01-01 09:00:00']);
+        $subscription1->update(['trial_ends_at' => '2021-01-04 09:00:00']);
+
+        $subscription2 = $testUser->newSubscription()->create();
+        $subscription2->update(['created_at' => '2021-01-04 09:00:00']);
+
+        $subscription1->cancelAt(Carbon::parse('2021-01-05'));
+        $subscription2->cancelAt(Carbon::parse('2021-01-05'));
+
+        $history = (new SubscriptionHistory())
+            ->from(Carbon::parse('2021-01-01 00:00:00'))
+            ->until(Carbon::parse('2022-01-01 00:00:01'))
+            ->groupBy(SubscriptionHistory::PERIOD_YEAR);
+
+        $histogram = $history->get();
+
+        $this->assertEquals([
+            'start' => '2021-01-01 00:00:00',
+            'end' => '2022-01-01 00:00:00',
+            'count' => 2,
+            'new' => 2,
+            'trial' => 1,
+            'grace' => 2,
+            'ended' => 2,
+        ], $histogram->get('2021'));
+        $this->assertEquals([
+            'start' => '2022-01-01 00:00:00',
+            'end' => '2023-01-01 00:00:00',
+            'count' => 0,
+            'new' => 0,
+            'trial' => 0,
+            'grace' => 0,
+            'ended' => 0,
+        ], $histogram->get('2022'));
     }
 
     /** @test */

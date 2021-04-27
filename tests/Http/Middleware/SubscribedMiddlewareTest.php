@@ -119,6 +119,7 @@ class SubscribedMiddlewareTest extends TestCase
 
         (new Subscribed())->handle($request, function ($request) {
             $this->assertNotNull($request->user());
+            return $request->user();
         });
     }
 }

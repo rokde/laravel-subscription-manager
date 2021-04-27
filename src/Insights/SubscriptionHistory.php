@@ -80,9 +80,6 @@ class SubscriptionHistory
     public function get(): Collection
     {
         $periods = $this->generatePeriods();
-        if ($periods->isEmpty()) {
-            return new Collection();
-        }
 
         //  get all Subscriptions
         $subscriptions = Subscription::query()
@@ -193,13 +190,12 @@ class SubscriptionHistory
                 return 'Y-m-d H:i';
             case static::PERIOD_MONTH:
                 return 'Y-m';
+            case static::PERIOD_YEAR:
+                return 'Y';
+            default:
             case static::PERIOD_WEEK:
                 // see https://stackoverflow.com/questions/15562270/php-datew-vs-mysql-yearweeknow
                 return 'oW';
-            case static::PERIOD_YEAR:
-                return 'Y';
         }
-
-        return 'oW';
     }
 }
