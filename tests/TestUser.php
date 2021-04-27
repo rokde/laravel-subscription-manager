@@ -20,6 +20,8 @@ class TestUser extends Model implements Authenticatable
 
     protected $guarded = [];
 
+    private string $token = '';
+
     public function getAuthIdentifierName()
     {
         return 'id';
@@ -37,12 +39,12 @@ class TestUser extends Model implements Authenticatable
 
     public function getRememberToken()
     {
-        return null;
+        return $this->token;
     }
 
     public function setRememberToken($value)
     {
-        // TODO: Implement setRememberToken() method.
+        $this->token = $value;
     }
 
     public function getRememberTokenName()
