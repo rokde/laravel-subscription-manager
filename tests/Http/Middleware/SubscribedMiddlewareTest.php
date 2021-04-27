@@ -3,13 +3,11 @@
 namespace Rokde\SubscriptionManager\Tests\Http\Middleware;
 
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 use Rokde\SubscriptionManager\Http\Middleware\Subscribed;
 use Rokde\SubscriptionManager\Models\Concerns\Subscribable;
 use Rokde\SubscriptionManager\Models\Subscription;
-use Rokde\SubscriptionManager\SubscribableResolver;
 use Rokde\SubscriptionManager\Tests\TestCase;
 use Rokde\SubscriptionManager\Tests\TestUser;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
