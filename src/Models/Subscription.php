@@ -209,7 +209,7 @@ class Subscription extends Model
     public function scopeRecurring(Builder $query): void
     {
         $query->notOnTrial()
-            ->noCancelled()
+            ->notCancelled()
             ->whereNotNull('period');
     }
 

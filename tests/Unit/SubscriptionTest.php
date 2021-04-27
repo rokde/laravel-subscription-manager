@@ -147,4 +147,76 @@ class SubscriptionTest extends TestCase
         $this->assertFalse($subscription->isRecurring());
         $this->assertEquals(CarbonInterval::years(1000), $subscription->periodLength());
     }
+
+    /** @test */
+    public function it_can_build_a_query_for_cancelled_subscriptions()
+    {
+        $query = Subscription::query()
+            ->cancelled();
+
+        $this->assertEquals('select * from "subscriptions" where "ends_at" is not null and "subscriptions"."deleted_at" is null', $query->toSql());
+    }
+
+    /** @test */
+    public function it_can_build_a_query_for_not_cancelled_subscriptions()
+    {
+        $query = Subscription::query()
+            ->notCancelled();
+
+        $this->assertEquals('select * from "subscriptions" where "ends_at" is null and "subscriptions"."deleted_at" is null', $query->toSql());
+    }
+
+    /** @test */
+    public function it_can_build_a_query_for_subscriptions_on_trial()
+    {
+        $query = Subscription::query()
+            ->onTrial();
+
+        $this->assertEquals('select * from "subscriptions" where "trial_ends_at" is not null and "trial_ends_at" > ? and "subscriptions"."deleted_at" is null', $query->toSql());
+    }
+
+    /** @test */
+    public function it_can_build_a_query_for_subscriptions_not_on_trial()
+    {
+        $query = Subscription::query()
+            ->notOnTrial();
+
+        $this->assertEquals('select * from "subscriptions" where ("trial_ends_at" is null or "trial_ends_at" <= ?) and "subscriptions"."deleted_at" is null', $query->toSql());
+    }
+
+    /** @test */
+    public function it_can_build_a_query_for_subscriptions_on_grace_period()
+    {
+        $query = Subscription::query()
+            ->onGracePeriod();
+
+        $this->assertEquals('select * from "subscriptions" where "ends_at" is not null and "ends_at" > ? and "subscriptions"."deleted_at" is null', $query->toSql());
+    }
+
+    /** @test */
+    public function it_can_build_a_query_for_subscriptions_not_on_grace_period()
+    {
+        $query = Subscription::query()
+            ->notOnGracePeriod();
+
+        $this->assertEquals('select * from "subscriptions" where ("ends_at" is null or "ends_at" <= ?) and "subscriptions"."deleted_at" is null', $query->toSql());
+    }
+
+    /** @test */
+    public function it_can_build_a_query_for_recurring_subscriptions()
+    {
+        $query = Subscription::query()
+            ->recurring();
+
+        $this->assertEquals('select * from "subscriptions" where ("trial_ends_at" is null or "trial_ends_at" <= ?) and "ends_at" is null and "period" is not null and "subscriptions"."deleted_at" is null', $query->toSql());
+    }
+
+    /** @test */
+    public function it_can_build_a_query_for_ended_subscriptions()
+    {
+        $query = Subscription::query()
+            ->ended();
+
+        $this->assertEquals('select * from "subscriptions" where "ends_at" is not null and ("ends_at" is null or "ends_at" <= ?) and "subscriptions"."deleted_at" is null', $query->toSql());
+    }
 }
