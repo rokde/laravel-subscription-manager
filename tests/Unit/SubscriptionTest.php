@@ -13,6 +13,7 @@ class SubscriptionTest extends TestCase
     /** @test */
     public function a_subscription_can_have_no_trial()
     {
+        /** @var Subscription $subscription */
         $subscription = Subscription::factory()->create([
             'trial_ends_at' => null,
             'ends_at' => null,
@@ -25,6 +26,7 @@ class SubscriptionTest extends TestCase
         $this->assertFalse($subscription->isCancelled());
         $this->assertFalse($subscription->isOnGracePeriod());
         $this->assertFalse($subscription->isEnded());
+        $this->assertFalse($subscription->hasPlan());
     }
 
     /** @test */
@@ -42,6 +44,7 @@ class SubscriptionTest extends TestCase
         $this->assertFalse($subscription->isCancelled());
         $this->assertFalse($subscription->isOnGracePeriod());
         $this->assertFalse($subscription->isEnded());
+        $this->assertFalse($subscription->hasPlan());
     }
 
     /** @test */
@@ -59,6 +62,7 @@ class SubscriptionTest extends TestCase
         $this->assertTrue($subscription->isCancelled());
         $this->assertTrue($subscription->isOnGracePeriod());
         $this->assertFalse($subscription->isEnded());
+        $this->assertFalse($subscription->hasPlan());
     }
 
     /** @test */
@@ -76,6 +80,7 @@ class SubscriptionTest extends TestCase
         $this->assertTrue($subscription->isCancelled());
         $this->assertTrue($subscription->isOnGracePeriod());
         $this->assertFalse($subscription->isEnded());
+        $this->assertFalse($subscription->hasPlan());
     }
 
     /** @test */
@@ -93,6 +98,7 @@ class SubscriptionTest extends TestCase
         $this->assertTrue($subscription->isCancelled());
         $this->assertFalse($subscription->isOnGracePeriod());
         $this->assertTrue($subscription->isEnded());
+        $this->assertFalse($subscription->hasPlan());
     }
 
     /** @test */
@@ -112,6 +118,8 @@ class SubscriptionTest extends TestCase
         $this->assertEquals($planA->getKey(), $subscription->plan->getKey());
         $this->assertInstanceOf(Subscription::class, $planA->subscriptions->first());
         $this->assertEquals($planA->subscriptions->first()->getKey(), $subscription->getKey());
+        $this->assertTrue($subscription->hasPlan());
+        $this->assertTrue($subscription->hasPlan($planA));
     }
 
     /** @test */

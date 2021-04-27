@@ -60,6 +60,8 @@ class HandlesSubscriptionsCreationTest extends TestCase
         $feature1 = Feature::factory()->create(['code' => 'f1']);
         /** @var Feature $feature2 */
         $feature2 = Feature::factory()->create(['code' => 'f2']);
+        /** @var Feature $feature3 */
+        $feature3 = Feature::factory()->create(['code' => 'f3']);
         /** @var Plan $planA */
         $planA = Plan::factory()->create(['name' => 'a']);
 
@@ -79,7 +81,9 @@ class HandlesSubscriptionsCreationTest extends TestCase
 
         $this->assertCount(2, $subscription->features);
         $this->assertTrue($subscription->hasFeature('f1'));
+        $this->assertTrue($subscription->hasFeature($feature1));
         $this->assertFalse($subscription->hasFeature('f3'));
+        $this->assertFalse($subscription->hasFeature($feature3));
 
         $this->assertTrue($model->onPlan($planA));
     }

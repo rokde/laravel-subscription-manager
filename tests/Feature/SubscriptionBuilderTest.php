@@ -80,4 +80,52 @@ class SubscriptionBuilderTest extends TestCase
         $this->assertNull($subscription->period);
         $this->assertEquals(CarbonInterval::years(1000), $subscription->periodLength());
     }
+
+    /** @test */
+    public function it_can_create_a_subscription_with_a_period_length()
+    {
+        $model = new class extends Model {
+            use Subscribable;
+
+            public function __construct(array $attributes = [])
+            {
+                parent::__construct($attributes);
+
+                $this->id = 1;
+            }
+        };
+
+        /** @var SubscriptionBuilder $builder */
+        $builder = $model->newSubscription();
+        $subscription = $builder->periodLength('P1D')
+            ->create();
+
+        $this->assertTrue($subscription->isRecurring());
+        $this->assertEquals('P1D', $subscription->period);
+        $this->assertEquals(CarbonInterval::day(), $subscription->periodLength());
+    }
+
+    /** @test */
+    public function it_can_create_a_subscription_with_a_period_length_with_date_interval()
+    {
+        $model = new class extends Model {
+            use Subscribable;
+
+            public function __construct(array $attributes = [])
+            {
+                parent::__construct($attributes);
+
+                $this->id = 1;
+            }
+        };
+
+        /** @var SubscriptionBuilder $builder */
+        $builder = $model->newSubscription();
+        $subscription = $builder->periodLength(\DateInterval::createFromDateString('1 week'))
+            ->create();
+
+        $this->assertTrue($subscription->isRecurring());
+        $this->assertEquals('P7D', $subscription->period);
+        $this->assertEquals(CarbonInterval::week(), $subscription->periodLength());
+    }
 }
