@@ -5,6 +5,7 @@ namespace Rokde\SubscriptionManager\Tests\Http\Middleware;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Rokde\SubscriptionManager\Http\Middleware\Subscribed;
 use Rokde\SubscriptionManager\Models\Concerns\Subscribable;
 use Rokde\SubscriptionManager\Models\Subscription;
@@ -110,6 +111,8 @@ class SubscribedMiddlewareTest extends TestCase
             'ends_at' => null,
         ]);
 
+        $this->assertEquals(403, $this->runMiddleware(new Subscribed()));
+
         $this->actingAs($user);
 
         $request = new Request();
@@ -117,9 +120,17 @@ class SubscribedMiddlewareTest extends TestCase
             return $user;
         });
 
-        (new Subscribed())->handle($request, function ($request) {
-            $this->assertNotNull($request->user());
-            return $request->user();
-        });
+        $this->assertEquals(200, $this->runMiddleware(new Subscribed()));
+    }
+
+    protected function runMiddleware($middleware, $feature = null)
+    {
+        try {
+            return $middleware->handle(new Request(), function () {
+                return (new Response())->setContent('<html></html>');
+            }, $feature)->status();
+        } catch (AccessDeniedHttpException $e) {
+            return $e->getStatusCode();
+        }
     }
 }
