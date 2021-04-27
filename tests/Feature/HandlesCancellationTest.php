@@ -28,6 +28,26 @@ class HandlesCancellationTest extends TestCase
     }
 
     /** @test */
+    public function it_can_not_cancel_a_subscription_twice()
+    {
+        /** @var Subscription $subscription */
+        $subscription = Subscription::factory()->create([
+            'trial_ends_at' => null,
+            'ends_at' => now()->addMonth(),
+        ]);
+
+        $subscription->cancel();
+
+        $this->assertTrue($subscription->isActive());
+        $this->assertTrue($subscription->isValid());
+        $this->assertFalse($subscription->isOnTrial());
+        $this->assertFalse($subscription->isRecurring());
+        $this->assertTrue($subscription->isCancelled());
+        $this->assertTrue($subscription->isOnGracePeriod());
+        $this->assertFalse($subscription->isEnded());
+    }
+
+    /** @test */
     public function it_can_cancel_on_the_end_of_the_trial_when_you_are_on_a_trial()
     {
         $endsAt = now()->addDays(30);
@@ -144,5 +164,21 @@ class HandlesCancellationTest extends TestCase
         $subscription->resume();
 
         $this->assertTrue($subscription->isCancelled());
+    }
+
+    /** @test */
+    public function it_can_use_ends_at_for_next_period()
+    {
+        /** @var Subscription $subscription */
+        $subscription = Subscription::factory()->create([
+            'trial_ends_at' => null,
+            'ends_at' => null,
+        ]);
+
+        $cancelAt = now()->subMinute();
+        $subscription->cancelAt($cancelAt);
+
+        $nextPeriod = $subscription->nextPeriod();
+        $this->assertTrue($cancelAt->addYear()->isSameDay($nextPeriod));
     }
 }
