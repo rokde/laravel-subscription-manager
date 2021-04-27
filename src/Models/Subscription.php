@@ -52,14 +52,23 @@ class Subscription extends Model
     use HasFactory;
     use SoftDeletes;
 
+    /**
+     * @var string[]|bool
+     */
     protected $guarded = [];
 
+    /**
+     * @var array
+     */
     protected $casts = [
         'trial_ends_at' => 'datetime',
         'ends_at' => 'datetime',
         'features' => 'array',
     ];
 
+    /**
+     * @var array
+     */
     protected $dispatchesEvents = [
         'cancelled' => SubscriptionCanceled::class,
         'created' => SubscriptionCreated::class,
@@ -73,6 +82,7 @@ class Subscription extends Model
     protected static function booted()
     {
         static::updated(function (Subscription $subscription) {
+            //  fire custom events for cancelling or resuming a subscription
             if ($subscription->isDirty('ends_at')) {
                 if ($subscription->getAttribute('ends_at') !== null) {
                     $subscription->fireCustomModelEvent('cancelled', 'dispatch');
@@ -163,13 +173,21 @@ class Subscription extends Model
         return $this->ends_at === null || $this->onGracePeriod();
     }
 
-    public function scopeActive(Builder $query)
+    /**
+     * scope for builder
+     *
+     * @param \Illuminate\Database\Eloquent\Builder|static $query
+     */
+    public function scopeActive(Builder $query): void
     {
         $query->where(function (Builder $query) {
             $query->whereNull('ends_at')
-                ->orWhere(function (Builder $query) {
-                    $query->onGracePeriod();
-                });
+                ->orWhere(
+                    /** @param \Illuminate\Database\Eloquent\Builder|static $query */
+                    function (Builder $query) {
+                        $query->onGracePeriod();
+                    }
+                );
         });
     }
 
@@ -183,7 +201,12 @@ class Subscription extends Model
         return $this->period !== null && ! $this->onTrial() && ! $this->cancelled();
     }
 
-    public function scopeRecurring(Builder $query)
+    /**
+     * scope for builder
+     *
+     * @param \Illuminate\Database\Eloquent\Builder|static $query
+     */
+    public function scopeRecurring(Builder $query): void
     {
         $query->notOnTrial()
             ->noCancelled()
@@ -200,12 +223,22 @@ class Subscription extends Model
         return $this->ends_at !== null;
     }
 
-    public function scopeCancelled(Builder $query)
+    /**
+     * scope for builder
+     *
+     * @param \Illuminate\Database\Eloquent\Builder|static $query
+     */
+    public function scopeCancelled(Builder $query): void
     {
         $query->whereNotNull('ends_at');
     }
 
-    public function scopeNotCancelled(Builder $query)
+    /**
+     * scope for builder
+     *
+     * @param \Illuminate\Database\Eloquent\Builder|static $query
+     */
+    public function scopeNotCancelled(Builder $query): void
     {
         $query->whereNull('ends_at');
     }
@@ -220,7 +253,12 @@ class Subscription extends Model
         return $this->cancelled() && ! $this->onGracePeriod();
     }
 
-    public function scopeEnded(Builder $query)
+    /**
+     * scope for builder
+     *
+     * @param \Illuminate\Database\Eloquent\Builder|static $query
+     */
+    public function scopeEnded(Builder $query): void
     {
         $query->cancelled()->notOnGracePeriod();
     }
@@ -235,12 +273,22 @@ class Subscription extends Model
         return $this->trial_ends_at && $this->trial_ends_at->isFuture();
     }
 
+    /**
+     * scope for builder
+     *
+     * @param \Illuminate\Database\Eloquent\Builder|static $query
+     */
     public function scopeOnTrial(Builder $query)
     {
         $query->whereNotNull('trial_ends_at')
             ->where('trial_ends_at', '>', Carbon::now()->toDateTimeString());
     }
 
+    /**
+     * scope for builder
+     *
+     * @param \Illuminate\Database\Eloquent\Builder|static $query
+     */
     public function scopeNotOnTrial(Builder $query)
     {
         $query->whereNull('trial_ends_at')
@@ -257,12 +305,22 @@ class Subscription extends Model
         return $this->ends_at && $this->ends_at->isFuture();
     }
 
+    /**
+     * scope for builder
+     *
+     * @param \Illuminate\Database\Eloquent\Builder|static $query
+     */
     public function scopeOnGracePeriod(Builder $query)
     {
         $query->whereNotNull('ends_at')
             ->where('ends_at', '>', Carbon::now()->toDateTimeString());
     }
 
+    /**
+     * scope for builder
+     *
+     * @param \Illuminate\Database\Eloquent\Builder|static $query
+     */
     public function scopeNotOnGracePeriod(Builder $query)
     {
         $query->whereNull('ends_at')
@@ -273,6 +331,7 @@ class Subscription extends Model
      * Returns a subscription circles collection
      *
      * @return array|\Rokde\SubscriptionManager\Models\SubscriptionCircle[]
+     * @throws \Exception
      */
     public function circles(): array
     {
