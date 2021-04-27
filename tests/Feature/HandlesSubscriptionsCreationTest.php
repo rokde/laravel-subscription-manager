@@ -114,13 +114,13 @@ class HandlesSubscriptionsCreationTest extends TestCase
         $this->assertTrue($subscription->hasFeature('f1'));
         $this->assertFalse($subscription->hasFeature('f3'));
 
-        $this->assertTrue($subscription->valid());
-        $this->assertFalse($subscription->onTrial());
-        $this->assertFalse($subscription->onGracePeriod());
-        $this->assertFalse($subscription->cancelled());
-        $this->assertTrue($subscription->active());
-        $this->assertTrue($subscription->recurring());
-        $this->assertFalse($subscription->ended());
+        $this->assertTrue($subscription->isValid());
+        $this->assertFalse($subscription->isOnTrial());
+        $this->assertFalse($subscription->isOnGracePeriod());
+        $this->assertFalse($subscription->isCancelled());
+        $this->assertTrue($subscription->isActive());
+        $this->assertTrue($subscription->isRecurring());
+        $this->assertFalse($subscription->isEnded());
     }
 
     /** @test */

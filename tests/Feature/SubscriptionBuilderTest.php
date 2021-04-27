@@ -30,7 +30,7 @@ class SubscriptionBuilderTest extends TestCase
         $subscription = $builder->trialDays(30)
             ->create();
 
-        $this->assertTrue($subscription->onTrial());
+        $this->assertTrue($subscription->isOnTrial());
         $this->assertEquals(Carbon::now()->addDays(30)->toDateString(), $subscription->trial_ends_at->toDateString());
     }
 
@@ -53,7 +53,7 @@ class SubscriptionBuilderTest extends TestCase
         $subscription = $builder->skipTrial()
             ->create();
 
-        $this->assertFalse($subscription->onTrial());
+        $this->assertFalse($subscription->isOnTrial());
         $this->assertNull($subscription->trial_ends_at);
     }
 
@@ -76,7 +76,7 @@ class SubscriptionBuilderTest extends TestCase
         $subscription = $builder->infinitePeriod()
             ->create();
 
-        $this->assertFalse($subscription->recurring());
+        $this->assertFalse($subscription->isRecurring());
         $this->assertNull($subscription->period);
         $this->assertEquals(CarbonInterval::years(1000), $subscription->periodLength());
     }

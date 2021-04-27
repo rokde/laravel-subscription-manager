@@ -18,13 +18,13 @@ class SubscriptionTest extends TestCase
             'ends_at' => null,
         ]);
 
-        $this->assertTrue($subscription->active());
-        $this->assertTrue($subscription->valid());
-        $this->assertFalse($subscription->onTrial());
-        $this->assertTrue($subscription->recurring());
-        $this->assertFalse($subscription->cancelled());
-        $this->assertFalse($subscription->onGracePeriod());
-        $this->assertFalse($subscription->ended());
+        $this->assertTrue($subscription->isActive());
+        $this->assertTrue($subscription->isValid());
+        $this->assertFalse($subscription->isOnTrial());
+        $this->assertTrue($subscription->isRecurring());
+        $this->assertFalse($subscription->isCancelled());
+        $this->assertFalse($subscription->isOnGracePeriod());
+        $this->assertFalse($subscription->isEnded());
     }
 
     /** @test */
@@ -35,13 +35,13 @@ class SubscriptionTest extends TestCase
             'ends_at' => null,
         ]);
 
-        $this->assertTrue($subscription->active());
-        $this->assertTrue($subscription->valid());
-        $this->assertTrue($subscription->onTrial());
-        $this->assertFalse($subscription->recurring());
-        $this->assertFalse($subscription->cancelled());
-        $this->assertFalse($subscription->onGracePeriod());
-        $this->assertFalse($subscription->ended());
+        $this->assertTrue($subscription->isActive());
+        $this->assertTrue($subscription->isValid());
+        $this->assertTrue($subscription->isOnTrial());
+        $this->assertFalse($subscription->isRecurring());
+        $this->assertFalse($subscription->isCancelled());
+        $this->assertFalse($subscription->isOnGracePeriod());
+        $this->assertFalse($subscription->isEnded());
     }
 
     /** @test */
@@ -52,13 +52,13 @@ class SubscriptionTest extends TestCase
             'ends_at' => Carbon::now()->addYear(),
         ]);
 
-        $this->assertTrue($subscription->active());
-        $this->assertTrue($subscription->valid());
-        $this->assertFalse($subscription->onTrial());
-        $this->assertFalse($subscription->recurring());
-        $this->assertTrue($subscription->cancelled());
-        $this->assertTrue($subscription->onGracePeriod());
-        $this->assertFalse($subscription->ended());
+        $this->assertTrue($subscription->isActive());
+        $this->assertTrue($subscription->isValid());
+        $this->assertFalse($subscription->isOnTrial());
+        $this->assertFalse($subscription->isRecurring());
+        $this->assertTrue($subscription->isCancelled());
+        $this->assertTrue($subscription->isOnGracePeriod());
+        $this->assertFalse($subscription->isEnded());
     }
 
     /** @test */
@@ -69,13 +69,13 @@ class SubscriptionTest extends TestCase
             'ends_at' => Carbon::now()->addYear(),
         ]);
 
-        $this->assertTrue($subscription->active());
-        $this->assertTrue($subscription->valid());
-        $this->assertTrue($subscription->onTrial());
-        $this->assertFalse($subscription->recurring());
-        $this->assertTrue($subscription->cancelled());
-        $this->assertTrue($subscription->onGracePeriod());
-        $this->assertFalse($subscription->ended());
+        $this->assertTrue($subscription->isActive());
+        $this->assertTrue($subscription->isValid());
+        $this->assertTrue($subscription->isOnTrial());
+        $this->assertFalse($subscription->isRecurring());
+        $this->assertTrue($subscription->isCancelled());
+        $this->assertTrue($subscription->isOnGracePeriod());
+        $this->assertFalse($subscription->isEnded());
     }
 
     /** @test */
@@ -86,13 +86,13 @@ class SubscriptionTest extends TestCase
             'ends_at' => Carbon::now()->subDay(),
         ]);
 
-        $this->assertFalse($subscription->active());
-        $this->assertFalse($subscription->valid());
-        $this->assertFalse($subscription->onTrial());
-        $this->assertFalse($subscription->recurring());
-        $this->assertTrue($subscription->cancelled());
-        $this->assertFalse($subscription->onGracePeriod());
-        $this->assertTrue($subscription->ended());
+        $this->assertFalse($subscription->isActive());
+        $this->assertFalse($subscription->isValid());
+        $this->assertFalse($subscription->isOnTrial());
+        $this->assertFalse($subscription->isRecurring());
+        $this->assertTrue($subscription->isCancelled());
+        $this->assertFalse($subscription->isOnGracePeriod());
+        $this->assertTrue($subscription->isEnded());
     }
 
     /** @test */
@@ -136,7 +136,7 @@ class SubscriptionTest extends TestCase
             'ends_at' => Carbon::now()->subDay(),
         ]);
 
-        $this->assertFalse($subscription->recurring());
+        $this->assertFalse($subscription->isRecurring());
         $this->assertEquals(CarbonInterval::years(1000), $subscription->periodLength());
     }
 }

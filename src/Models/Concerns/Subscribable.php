@@ -66,7 +66,8 @@ trait Subscribable
     {
         return $this->activeSubscriptions
                 ->first(function (Subscription $subscription) use ($feature) {
-                    return $subscription->valid() && ($feature === null || $subscription->hasFeature($feature));
+                    return $subscription->isValid()
+                        && ($feature === null || $subscription->hasFeature($feature));
                 }) !== null;
     }
 
@@ -98,7 +99,7 @@ trait Subscribable
                 ->where('plan_id', $plan->getKey())
                 ->get()
                 ->first(function (Subscription $subscription) {
-                    return $subscription->valid();
+                    return $subscription->isValid();
                 }) !== null;
     }
 }

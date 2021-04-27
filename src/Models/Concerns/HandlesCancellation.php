@@ -22,11 +22,11 @@ trait HandlesCancellation
      */
     public function cancel(): self
     {
-        if ($this->onGracePeriod()) {
+        if ($this->isOnGracePeriod()) {
             return $this;
         }
 
-        $endsAt = $this->onTrial()
+        $endsAt = $this->isOnTrial()
             ? $this->trial_ends_at
             : ($this->isInfinite()
                 ? Carbon::now()
@@ -86,7 +86,7 @@ trait HandlesCancellation
      */
     public function resume(): self
     {
-        if (! $this->onGracePeriod()) {
+        if (! $this->isOnGracePeriod()) {
             return $this;
         }
 

@@ -158,9 +158,9 @@ class Subscription extends Model
      *
      * @return bool
      */
-    public function valid(): bool
+    public function isValid(): bool
     {
-        return $this->active() || $this->onTrial() || $this->onGracePeriod();
+        return $this->isActive() || $this->isOnTrial() || $this->isOnGracePeriod();
     }
 
     /**
@@ -168,9 +168,9 @@ class Subscription extends Model
      *
      * @return bool
      */
-    public function active(): bool
+    public function isActive(): bool
     {
-        return $this->ends_at === null || $this->onGracePeriod();
+        return $this->ends_at === null || $this->isOnGracePeriod();
     }
 
     /**
@@ -196,9 +196,9 @@ class Subscription extends Model
      *
      * @return bool
      */
-    public function recurring(): bool
+    public function isRecurring(): bool
     {
-        return $this->period !== null && ! $this->onTrial() && ! $this->cancelled();
+        return $this->period !== null && !$this->isOnTrial() && !$this->isCancelled();
     }
 
     /**
@@ -218,7 +218,7 @@ class Subscription extends Model
      *
      * @return bool
      */
-    public function cancelled(): bool
+    public function isCancelled(): bool
     {
         return $this->ends_at !== null;
     }
@@ -248,9 +248,9 @@ class Subscription extends Model
      *
      * @return bool
      */
-    public function ended(): bool
+    public function isEnded(): bool
     {
-        return $this->cancelled() && ! $this->onGracePeriod();
+        return $this->isCancelled() && !$this->isOnGracePeriod();
     }
 
     /**
@@ -268,7 +268,7 @@ class Subscription extends Model
      *
      * @return bool
      */
-    public function onTrial(): bool
+    public function isOnTrial(): bool
     {
         return $this->trial_ends_at && $this->trial_ends_at->isFuture();
     }
@@ -300,7 +300,7 @@ class Subscription extends Model
      *
      * @return bool
      */
-    public function onGracePeriod(): bool
+    public function isOnGracePeriod(): bool
     {
         return $this->ends_at && $this->ends_at->isFuture();
     }
