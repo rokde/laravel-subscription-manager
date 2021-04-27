@@ -11,6 +11,7 @@ use Rokde\SubscriptionManager\Models\Concerns\Subscribable;
 use Rokde\SubscriptionManager\Models\Subscription;
 use Rokde\SubscriptionManager\SubscribableResolver;
 use Rokde\SubscriptionManager\Tests\TestCase;
+use Rokde\SubscriptionManager\Tests\TestUser;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class SubscribedMiddlewareTest extends TestCase
@@ -99,36 +100,17 @@ class SubscribedMiddlewareTest extends TestCase
         });
     }
 
-    /** @-test */
+    /** @test */
     public function it_succeeds_when_user_has_subscription()
     {
-        $user = new class extends User {
-            use Subscribable;
+        $user = new TestUser(['id' => 1]);
 
-            public $id = 1;
-
-            protected function setForeignAttributesForCreate(Model $model)
-            {
-                $model->setAttribute('subscribable_id', 1);
-            }
-
-            public function getMorphClass()
-            {
-                return 'TestUser';
-            }
-        };
-
-        /** @var Subscription $subscription */
-        $subscription = Subscription::factory()->create([
-            'subscribable_type' => 'TestUser',
+        Subscription::factory()->create([
+            'subscribable_type' => TestUser::class,
             'subscribable_id' => $user->id,
             'trial_ends_at' => null,
             'ends_at' => null,
         ]);
-
-        SubscribableResolver::resolveSubscribable(function () use ($user) {
-            return $user;
-        });
 
         $this->actingAs($user);
 
