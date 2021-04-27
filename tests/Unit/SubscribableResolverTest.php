@@ -21,7 +21,8 @@ class SubscribableResolverTest extends TestCase
     /** @test */
     public function it_can_resolve_another_subscribable()
     {
-        $testSubscriber = new class {};
+        $testSubscriber = new class {
+        };
 
         SubscribableResolver::resolveSubscribable(function () use ($testSubscriber) {
             return $testSubscriber;

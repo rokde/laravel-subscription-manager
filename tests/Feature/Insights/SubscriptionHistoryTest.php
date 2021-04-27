@@ -3,7 +3,6 @@
 namespace Rokde\SubscriptionManager\Tests\Feature\Insights;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Rokde\SubscriptionManager\Insights\SubscriptionHistory;
 use Rokde\SubscriptionManager\Tests\TestCase;
 use Rokde\SubscriptionManager\Tests\TestUser;

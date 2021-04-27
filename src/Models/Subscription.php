@@ -198,7 +198,7 @@ class Subscription extends Model
      */
     public function isRecurring(): bool
     {
-        return $this->period !== null && !$this->isOnTrial() && !$this->isCancelled();
+        return $this->period !== null && ! $this->isOnTrial() && ! $this->isCancelled();
     }
 
     /**
@@ -250,7 +250,7 @@ class Subscription extends Model
      */
     public function isEnded(): bool
     {
-        return $this->isCancelled() && !$this->isOnGracePeriod();
+        return $this->isCancelled() && ! $this->isOnGracePeriod();
     }
 
     /**
