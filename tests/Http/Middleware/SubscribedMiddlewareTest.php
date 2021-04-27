@@ -100,7 +100,7 @@ class SubscribedMiddlewareTest extends TestCase
         });
     }
 
-    /** @test */
+    /** @-test */
     public function it_succeeds_when_user_has_subscription()
     {
         $user = new TestUser(['id' => 1]);
