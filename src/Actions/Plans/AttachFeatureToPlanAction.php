@@ -18,7 +18,7 @@ class AttachFeatureToPlanAction
     public function execute(Plan $plan, Feature $feature, ?int $defaultQuota = null): Plan
     {
         //  normalize default quota
-        if (!$feature->metered) {
+        if (! $feature->metered) {
             $defaultQuota = null;
         } else {
             //  cast to integer

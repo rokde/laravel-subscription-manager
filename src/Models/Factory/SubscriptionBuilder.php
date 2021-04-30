@@ -45,6 +45,7 @@ class SubscriptionBuilder
         foreach ($features as $feature) {
             if ($feature instanceof Feature) {
                 $this->features[] = SubscriptionFeature::fromFeature($feature);
+
                 continue;
             }
 

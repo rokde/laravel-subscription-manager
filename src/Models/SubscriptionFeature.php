@@ -80,7 +80,7 @@ class SubscriptionFeature extends Model
 
     public function isUsable(): bool
     {
-        return !$this->isMetered() || $this->remaining > 0;
+        return ! $this->isMetered() || $this->remaining > 0;
     }
 
     public function isMetered(): bool

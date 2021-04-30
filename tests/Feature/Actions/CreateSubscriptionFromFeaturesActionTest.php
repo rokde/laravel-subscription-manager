@@ -46,11 +46,14 @@ class CreateSubscriptionFromFeaturesActionTest extends TestCase
         $user = new TestUser();
         $user->save();
 
-        $subscription = (new CreateSubscriptionFromFeaturesAction())->execute(['f1', 'f2'], $user,
+        $subscription = (new CreateSubscriptionFromFeaturesAction())->execute(
+            ['f1', 'f2'],
+            $user,
             function (SubscriptionBuilder $factory) {
                 $factory->infinitePeriod()
                     ->skipTrial();
-            });
+            }
+        );
 
         $this->assertNull($subscription->period);
         $this->assertFalse($subscription->isRecurring());
