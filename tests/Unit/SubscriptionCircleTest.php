@@ -124,8 +124,8 @@ class SubscriptionCircleTest extends TestCase
     /** @test */
     public function it_can_have_circles_until_the_end_date_when_cancelled_in_future()
     {
-        $createdAt = now()->addSeconds(2)->subYear();
-        $cancelAt = now()->addMonths(3)->addHours(3);
+        $createdAt = now()->startOfMonth()->addSeconds(2)->subYear();
+        $cancelAt = now()->startOfMonth()->addMonths(3)->addHours(3);
 
         /** @var Subscription $subscription */
         $subscription = Subscription::factory()->create([
