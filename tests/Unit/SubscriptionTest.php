@@ -154,7 +154,8 @@ class SubscriptionTest extends TestCase
         $query = Subscription::query()
             ->cancelled();
 
-        $this->assertEquals('select * from "subscriptions" where "ends_at" is not null and "subscriptions"."deleted_at" is null', $query->toSql());
+        $this->assertEquals('select * from "subscriptions" where "ends_at" is not null and "subscriptions"."deleted_at" is null',
+            $query->toSql());
     }
 
     /** @test */
@@ -163,7 +164,8 @@ class SubscriptionTest extends TestCase
         $query = Subscription::query()
             ->notCancelled();
 
-        $this->assertEquals('select * from "subscriptions" where "ends_at" is null and "subscriptions"."deleted_at" is null', $query->toSql());
+        $this->assertEquals('select * from "subscriptions" where "ends_at" is null and "subscriptions"."deleted_at" is null',
+            $query->toSql());
     }
 
     /** @test */
@@ -172,7 +174,8 @@ class SubscriptionTest extends TestCase
         $query = Subscription::query()
             ->onTrial();
 
-        $this->assertEquals('select * from "subscriptions" where "trial_ends_at" is not null and "trial_ends_at" > ? and "subscriptions"."deleted_at" is null', $query->toSql());
+        $this->assertEquals('select * from "subscriptions" where "trial_ends_at" is not null and "trial_ends_at" > ? and "subscriptions"."deleted_at" is null',
+            $query->toSql());
     }
 
     /** @test */
@@ -181,7 +184,8 @@ class SubscriptionTest extends TestCase
         $query = Subscription::query()
             ->notOnTrial();
 
-        $this->assertEquals('select * from "subscriptions" where ("trial_ends_at" is null or "trial_ends_at" <= ?) and "subscriptions"."deleted_at" is null', $query->toSql());
+        $this->assertEquals('select * from "subscriptions" where ("trial_ends_at" is null or "trial_ends_at" <= ?) and "subscriptions"."deleted_at" is null',
+            $query->toSql());
     }
 
     /** @test */
@@ -190,7 +194,8 @@ class SubscriptionTest extends TestCase
         $query = Subscription::query()
             ->onGracePeriod();
 
-        $this->assertEquals('select * from "subscriptions" where "ends_at" is not null and "ends_at" > ? and "subscriptions"."deleted_at" is null', $query->toSql());
+        $this->assertEquals('select * from "subscriptions" where "ends_at" is not null and "ends_at" > ? and "subscriptions"."deleted_at" is null',
+            $query->toSql());
     }
 
     /** @test */
@@ -199,7 +204,8 @@ class SubscriptionTest extends TestCase
         $query = Subscription::query()
             ->notOnGracePeriod();
 
-        $this->assertEquals('select * from "subscriptions" where ("ends_at" is null or "ends_at" <= ?) and "subscriptions"."deleted_at" is null', $query->toSql());
+        $this->assertEquals('select * from "subscriptions" where ("ends_at" is null or "ends_at" <= ?) and "subscriptions"."deleted_at" is null',
+            $query->toSql());
     }
 
     /** @test */
@@ -208,7 +214,8 @@ class SubscriptionTest extends TestCase
         $query = Subscription::query()
             ->recurring();
 
-        $this->assertEquals('select * from "subscriptions" where ("trial_ends_at" is null or "trial_ends_at" <= ?) and "ends_at" is null and "period" is not null and "subscriptions"."deleted_at" is null', $query->toSql());
+        $this->assertEquals('select * from "subscriptions" where ("trial_ends_at" is null or "trial_ends_at" <= ?) and "ends_at" is null and "period" is not null and "subscriptions"."deleted_at" is null',
+            $query->toSql());
     }
 
     /** @test */
@@ -217,6 +224,19 @@ class SubscriptionTest extends TestCase
         $query = Subscription::query()
             ->ended();
 
-        $this->assertEquals('select * from "subscriptions" where "ends_at" is not null and ("ends_at" is null or "ends_at" <= ?) and "subscriptions"."deleted_at" is null', $query->toSql());
+        $this->assertEquals('select * from "subscriptions" where "ends_at" is not null and ("ends_at" is null or "ends_at" <= ?) and "subscriptions"."deleted_at" is null',
+            $query->toSql());
+    }
+
+    /** @test */
+    public function it_gets_an_uuid_automatically()
+    {
+        $subscription = new Subscription();
+        $subscription->subscribable_type = 'Test';
+        $subscription->subscribable_id = 1;
+
+        $subscription->save();
+
+        $this->assertNotNull($subscription->uuid);
     }
 }

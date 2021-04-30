@@ -1,0 +1,24 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateSubscriptionFeatureUsagesTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('subscription_feature_usages', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('subscription_feature_id')->constrained()->onDelete('cascade');
+            $table->morphs('used_by');
+            $table->unsignedInteger('used')->default(1);
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('subscription_feature_usages');
+    }
+}

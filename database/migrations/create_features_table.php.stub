@@ -11,6 +11,7 @@ class CreateFeaturesTable extends Migration
         Schema::create('features', function (Blueprint $table) {
             $table->id();
             $table->string('code', 64)->unique();
+            $table->boolean('metered')->default(false);
             $table->timestamps();
         });
     }

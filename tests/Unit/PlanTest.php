@@ -38,4 +38,40 @@ class PlanTest extends TestCase
 
         $this->assertEquals($planA->getKey(), Plan::byName('a')->getKey());
     }
+
+    /** @test */
+    public function it_can_have_a_metered_feature_with_default_quota()
+    {
+        /** @var Feature $feature */
+        $feature = Feature::factory()->create(['code' => 'f1']);
+        /** @var Feature $meteredFeature */
+        $meteredFeature = Feature::factory()->metered()->create(['code' => 'm1']);
+
+        /** @var Plan $planA */
+        $planA = Plan::factory()->create(['name' => 'a']);
+        $planA->features()->attach($feature);
+        $planA->features()->attach($meteredFeature, ['default_quota' => 10]);
+
+        $this->assertCount(2, $planA->features);
+        $this->assertFalse($planA->features->first()->metered);
+        $this->assertTrue($planA->features->last()->metered);
+
+        $this->assertEquals(10, $planA->features->last()->pivot->default_quota);
+    }
+
+    /** @test */
+    public function it_can_select_metered_features()
+    {
+        /** @var Feature $feature */
+        $feature = Feature::factory()->create(['code' => 'f1']);
+        /** @var Feature $meteredFeature */
+        $meteredFeature = Feature::factory()->metered()->create(['code' => 'm1']);
+
+        /** @var Plan $planA */
+        $planA = Plan::factory()->create(['name' => 'a']);
+        $planA->features()->attach($feature);
+        $planA->features()->attach($meteredFeature, ['default_quota' => 10]);
+
+        $this->assertCount(1, $planA->meteredFeatures);
+    }
 }

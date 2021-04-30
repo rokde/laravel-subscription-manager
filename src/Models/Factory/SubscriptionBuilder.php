@@ -5,8 +5,10 @@ namespace Rokde\SubscriptionManager\Models\Factory;
 use Carbon\CarbonInterval;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Rokde\SubscriptionManager\Models\Feature;
 use Rokde\SubscriptionManager\Models\Plan;
 use Rokde\SubscriptionManager\Models\Subscription;
+use Rokde\SubscriptionManager\Models\SubscriptionFeature;
 
 class SubscriptionBuilder
 {
@@ -28,7 +30,7 @@ class SubscriptionBuilder
         $this->plan = $plan;
 
         if ($this->plan instanceof Plan) {
-            $this->withFeatures($plan->features);
+            $this->withFeaturesFromPlan($plan);
         }
     }
 
@@ -40,9 +42,23 @@ class SubscriptionBuilder
      */
     public function withFeatures($features): self
     {
-        $this->features = is_array($features)
-            ? $features
-            : $features->pluck('code')->all();
+        foreach ($features as $feature) {
+            if ($feature instanceof Feature) {
+                $this->features[] = SubscriptionFeature::fromFeature($feature);
+                continue;
+            }
+
+            $this->features[] = SubscriptionFeature::fromCode($feature);
+        }
+
+        return $this;
+    }
+
+    public function withFeaturesFromPlan(Plan $plan): self
+    {
+        $plan->features->each(function (Feature $feature) {
+            $this->features[] = SubscriptionFeature::fromFeature($feature);
+        });
 
         return $this;
     }
@@ -111,15 +127,19 @@ class SubscriptionBuilder
      */
     public function create(): Subscription
     {
-        return $this->subscribable->subscriptions()->create([
+        /** @var Subscription $subscription */
+        $subscription = $this->subscribable->subscriptions()->create([
             'plan_id' => $this->plan instanceof Plan
                 ? $this->plan->getKey()
                 : null,
-            'features' => $this->features,
             'period' => $this->period,
             'trial_ends_at' => $this->getTrialEnd(),
             'ends_at' => null,
         ]);
+
+        $subscription->features()->saveMany($this->features);
+
+        return $subscription;
     }
 
     /**

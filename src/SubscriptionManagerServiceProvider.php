@@ -19,6 +19,8 @@ class SubscriptionManagerServiceProvider extends PackageServiceProvider
             ->hasMigration('create_plans_table')
             ->hasMigration('create_plan_feature_table')
             ->hasMigration('create_subscriptions_table')
+            ->hasMigration('create_subscription_features_table')
+            ->hasMigration('create_subscription_feature_usages_table')
             ->hasCommand(FeaturesListCommand::class)
             ->hasCommand(PlansListCommand::class);
     }

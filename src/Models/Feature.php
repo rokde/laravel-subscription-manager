@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  *
  * @property int $id
  * @property string $code
+ * @property bool $metered
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|Plan[] $plans
@@ -23,8 +24,19 @@ class Feature extends Model
 {
     use HasFactory;
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'code',
+        'metered',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'metered' => 'boolean',
     ];
 
     /**
@@ -41,6 +53,7 @@ class Feature extends Model
     public function plans(): BelongsToMany
     {
         return $this->belongsToMany(Plan::class, 'plan_feature', 'feature_id')
+            ->withPivot('default_quota')
             ->withTimestamps();
     }
 }

@@ -15,8 +15,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|Feature[] $features
- * @property-read \Illuminate\Database\Eloquent\Collection|Subscription[] $subscriptions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Rokde\SubscriptionManager\Models\Feature[] $features
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Rokde\SubscriptionManager\Models\Feature[] $meteredFeatures
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Rokde\SubscriptionManager\Models\Subscription[] $subscriptions
  * @method static \Illuminate\Database\Eloquent\Builder|Plan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Plan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Plan query()
@@ -43,7 +44,14 @@ class Plan extends Model
     public function features(): BelongsToMany
     {
         return $this->belongsToMany(Feature::class, 'plan_feature', 'plan_id')
+            ->withPivot('default_quota')
             ->withTimestamps();
+    }
+
+    public function meteredFeatures(): BelongsToMany
+    {
+        return $this->features()
+            ->wherePivotNotNull('default_quota');
     }
 
     public function subscriptions(): HasMany

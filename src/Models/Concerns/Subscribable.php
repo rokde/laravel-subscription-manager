@@ -79,7 +79,7 @@ trait Subscribable
     public function subscribedFeatures(): array
     {
         return $this->activeSubscriptions->flatMap(function (Subscription $subscription) {
-            return (array)$subscription->features;
+            return $subscription->features()->pluck('code');
         })
             ->unique()
             ->sort()

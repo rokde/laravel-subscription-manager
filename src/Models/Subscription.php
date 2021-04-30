@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Rokde\SubscriptionManager\Events\SubscriptionCanceled;
 use Rokde\SubscriptionManager\Events\SubscriptionCreated;
 use Rokde\SubscriptionManager\Events\SubscriptionDeleted;
@@ -27,24 +29,25 @@ use Rokde\SubscriptionManager\Models\Concerns\HandlesCancellation;
  * @property string $subscribable_type
  * @property int $subscribable_id
  * @property int|null $plan_id
- * @property array $features
+ * @property string $uuid
  * @property string|null $period
- * @property Carbon|null $trial_ends_at
- * @property Carbon|null $ends_at
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @property Carbon $deleted_at
- * @property-read Model|\Eloquent $subscribable
- * @property-read null|Plan $plan
- * @method static Builder|Subscription active()
- * @method static Builder|Subscription cancelled()
- * @method static Builder|Subscription ended()
- * @method static Builder|Subscription notCancelled()
- * @method static Builder|Subscription notOnGracePeriod()
- * @method static Builder|Subscription notOnTrial()
- * @method static Builder|Subscription onGracePeriod()
- * @method static Builder|Subscription onTrial()
- * @method static Builder|Subscription recurring()
+ * @property \Illuminate\Support\Carbon|null $trial_ends_at
+ * @property \Illuminate\Support\Carbon|null $ends_at
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
+ * @property \Illuminate\Support\Carbon $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $subscribable
+ * @property-read null|\Rokde\SubscriptionManager\Models\Plan $plan
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Rokde\SubscriptionManager\Models\SubscriptionFeature[] $features
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rokde\SubscriptionManager\Models\Subscription active()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rokde\SubscriptionManager\Models\Subscription cancelled()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rokde\SubscriptionManager\Models\Subscription ended()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rokde\SubscriptionManager\Models\Subscription notCancelled()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rokde\SubscriptionManager\Models\Subscription notOnGracePeriod()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rokde\SubscriptionManager\Models\Subscription notOnTrial()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rokde\SubscriptionManager\Models\Subscription onGracePeriod()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rokde\SubscriptionManager\Models\Subscription onTrial()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Rokde\SubscriptionManager\Models\Subscription recurring()
  */
 class Subscription extends Model
 {
@@ -63,7 +66,6 @@ class Subscription extends Model
     protected $casts = [
         'trial_ends_at' => 'datetime',
         'ends_at' => 'datetime',
-        'features' => 'array',
     ];
 
     /**
@@ -81,6 +83,12 @@ class Subscription extends Model
 
     protected static function booted()
     {
+        static::creating(function (Subscription $subscription) {
+            if (empty($subscription->uuid)) {
+                $subscription->uuid = (string) Str::uuid();
+            }
+        });
+
         static::updated(function (Subscription $subscription) {
             //  fire custom events for cancelling or resuming a subscription
             if ($subscription->isDirty('ends_at')) {
@@ -101,6 +109,11 @@ class Subscription extends Model
     public function plan(): BelongsTo
     {
         return $this->belongsTo(Plan::class);
+    }
+
+    public function features(): HasMany
+    {
+        return $this->hasMany(SubscriptionFeature::class);
     }
 
     /**
@@ -128,7 +141,11 @@ class Subscription extends Model
             $feature = $feature->code;
         }
 
-        return in_array($feature, $this->features);
+        if ($this->relationLoaded('features')) {
+            return $this->features->pluck('code')->contains($feature);
+        }
+
+        return $this->features()->pluck('code')->contains($feature);
     }
 
     /**

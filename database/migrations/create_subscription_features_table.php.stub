@@ -1,0 +1,26 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateSubscriptionFeaturesTable extends Migration
+{
+    public function up()
+    {
+        Schema::create('subscription_features', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('subscription_id')->constrained()->onDelete('cascade');
+            $table->string('code', 64)->unique();
+            $table->boolean('metered')->default(false);
+            $table->unsignedInteger('quota')->nullable()->default(null);
+            $table->unsignedInteger('used')->nullable()->default(null);
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('subscription_features');
+    }
+}

@@ -51,5 +51,11 @@ class TestCase extends Orchestra
 
         include_once __DIR__.'/../database/migrations/create_subscriptions_table.php.stub';
         (new \CreateSubscriptionsTable())->up();
+
+        include_once __DIR__.'/../database/migrations/create_subscription_features_table.php.stub';
+        (new \CreateSubscriptionFeaturesTable())->up();
+
+        include_once __DIR__.'/../database/migrations/create_subscription_feature_usages_table.php.stub';
+        (new \CreateSubscriptionFeatureUsagesTable())->up();
     }
 }

@@ -3,6 +3,7 @@
 namespace Rokde\SubscriptionManager\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use Rokde\SubscriptionManager\Models\Subscription;
 
 class SubscriptionFactory extends Factory
@@ -15,7 +16,7 @@ class SubscriptionFactory extends Factory
             'subscribable_type' => 'test',
             'subscribable_id' => 1,
             'plan_id' => null,
-            'features' => ['feature-1', 'feature-2'],
+            'uuid' => (string) Str::uuid(),
             'period' => 'P1Y',
         ];
     }

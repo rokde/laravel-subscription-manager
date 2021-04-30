@@ -13,6 +13,16 @@ class FeatureFactory extends Factory
     {
         return [
             'code' => $this->faker->unique()->slug,
+            'metered' => false,
         ];
+    }
+
+    public function metered(): self
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'metered' => true,
+            ];
+        });
     }
 }
