@@ -2,6 +2,7 @@
 
 namespace Rokde\SubscriptionManager\Tests\Unit;
 
+use Carbon\Carbon;
 use Rokde\SubscriptionManager\Models\Subscription;
 use Rokde\SubscriptionManager\Models\SubscriptionCircle;
 use Rokde\SubscriptionManager\Tests\TestCase;
@@ -80,8 +81,9 @@ class SubscriptionCircleTest extends TestCase
     /** @test */
     public function it_can_have_circles_until_the_end_date_when_cancelled()
     {
-        $createdAt = now()->addSeconds(2)->subYear();
-        $cancelAt = now()->subMinutes(25)->subMonths(3);
+        $now = Carbon::create(2021, 04, 30, 21, 02, 03);
+        $createdAt = $now->clone()->addSeconds(2)->subYear();
+        $cancelAt = $now->clone()->subMinutes(25)->subMonths(3);
 
         /** @var Subscription $subscription */
         $subscription = Subscription::factory()->create([
