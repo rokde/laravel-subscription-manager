@@ -11,6 +11,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Lint Code Base
-        uses: overtrue/phplint@master
+        uses: overtrue/phplint@8.0
         with:
           path: src
