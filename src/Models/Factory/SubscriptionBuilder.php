@@ -17,6 +17,7 @@ class SubscriptionBuilder
     protected ?int $trialDays = null;
     protected bool $skipTrial = false;
     protected array $features = [];
+    protected array $quotas = [];
     protected ?string $period = 'P1Y';
 
     public function __construct(Model $subscribable, ?Plan $plan = null)
@@ -97,6 +98,17 @@ class SubscriptionBuilder
         return $this;
     }
 
+    public function setQuota(string|Feature $featureOrCode, int $quota): self
+    {
+        $featureCode = $featureOrCode instanceof Feature
+            ? $featureOrCode->code
+            : $featureOrCode;
+
+        $this->quotas[$featureCode] = $quota;
+
+        return $this;
+    }
+
     /** Creates the subscription with all values already set */
     public function create(): Subscription
     {
@@ -110,7 +122,18 @@ class SubscriptionBuilder
             'ends_at' => null,
         ]);
 
-        $subscription->features()->saveMany($this->features);
+        /** @var SubscriptionFeature[] $subscriptionFeatures */
+        $subscriptionFeatures = $subscription->features()->saveMany($this->features);
+        if (!empty($this->quotas)) {
+            foreach ($subscriptionFeatures as $subscriptionFeature) {
+                if (!$subscriptionFeature->isMetered() || !array_key_exists($subscriptionFeature->code,
+                        $this->quotas)) {
+                    continue;
+                }
+
+                $subscriptionFeature->update(['quota' => $this->quotas[$subscriptionFeature->code]]);
+            }
+        }
 
         return $subscription;
     }

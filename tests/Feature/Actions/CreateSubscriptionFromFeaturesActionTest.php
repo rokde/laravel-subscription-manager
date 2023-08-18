@@ -92,4 +92,22 @@ class CreateSubscriptionFromFeaturesActionTest extends TestCase
 
         $this->assertEquals($subscription->getKey(), $subscription->features->first()->subscription->getKey());
     }
+
+    /** @test */
+    public function it_can_set_quota_on_creating_by_action()
+    {
+        $feature = (new CreateFeatureAction())->execute('f1');
+        $meteredFeature = (new CreateFeatureAction())->execute('f2', true);
+
+        $user = new TestUser();
+        $user->save();
+
+        $subscription = (new CreateSubscriptionFromFeaturesAction())->execute([$feature, $meteredFeature], $user, function (SubscriptionBuilder $builder) {
+            $builder->setQuota('f2', 10);
+        });
+
+        $this->assertEquals(10, $subscription->features->last()->quota);
+        $this->assertEquals(0, $subscription->features->last()->used);
+        $this->assertEquals(10, $subscription->features->last()->remaining);
+    }
 }

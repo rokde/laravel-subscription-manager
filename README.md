@@ -162,6 +162,18 @@ $user->subscription->cancelAt($datetime);   // cancel at a concrete time
 $user->subscription->resume();  // resume a cancelled subscription within grace period
 ```
 
+### Consuming Features
+
+1.) Setting a quota on metered features by actions (or direct via Subscription Builder)
+
+```php
+$meteredFeature = (new CreateFeatureAction())->execute('users-count', true);
+
+$subscription = (new CreateSubscriptionFromFeaturesAction())
+    ->execute([$meteredFeature], request()->user(), function (SubscriptionBuilder $builder) {
+        $builder->setQuota('users-count', 10); // allow 10 users
+    });
+```
 
 ### Checking
 
