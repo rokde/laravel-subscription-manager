@@ -3,8 +3,6 @@
 namespace Rokde\SubscriptionManager;
 
 use Closure;
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class SubscribableResolver

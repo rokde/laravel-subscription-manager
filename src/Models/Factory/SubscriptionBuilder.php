@@ -124,10 +124,12 @@ class SubscriptionBuilder
 
         /** @var SubscriptionFeature[] $subscriptionFeatures */
         $subscriptionFeatures = $subscription->features()->saveMany($this->features);
-        if (!empty($this->quotas)) {
+        if (! empty($this->quotas)) {
             foreach ($subscriptionFeatures as $subscriptionFeature) {
-                if (!$subscriptionFeature->isMetered() || !array_key_exists($subscriptionFeature->code,
-                        $this->quotas)) {
+                if (! $subscriptionFeature->isMetered() || ! array_key_exists(
+                    $subscriptionFeature->code,
+                    $this->quotas
+                )) {
                     continue;
                 }
 
@@ -144,7 +146,7 @@ class SubscriptionBuilder
         return $this->skipTrial
             ? null
             : (
-            $this->trialDays !== null
+                $this->trialDays !== null
                 ? Carbon::now()->addDays($this->trialDays)
                 : null
             );

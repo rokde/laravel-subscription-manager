@@ -27,7 +27,7 @@ class SetFeatureQuotaAction
 
     public function execute(SubscriptionFeature $feature, int $quota): SubscriptionFeature
     {
-        if (!$feature->isMetered()) {
+        if (! $feature->isMetered()) {
             $feature->update(['quota' => $quota]);
         }
 
