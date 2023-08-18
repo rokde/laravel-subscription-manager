@@ -30,6 +30,10 @@ trait HandlesCancellation
                 ? Carbon::now()
                 : $this->nextPeriod());
 
+        if ($endsAt === null) {
+            return $this;
+        }
+
         return $this->cancelAt($endsAt);
     }
 
