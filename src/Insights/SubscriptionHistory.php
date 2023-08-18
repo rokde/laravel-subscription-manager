@@ -80,11 +80,11 @@ class SubscriptionHistory
         return $periods->mapWithKeys(function (array $periodBoundaries) use ($subscriptions, &$offset, &$offsetTrial) {
             [$periodStart, $periodEnd, $periodKey] = $periodBoundaries;
 
-            $subscriptionsInPeriod = $subscriptions->filter(function (Subscription $subscription) use ($periodStart, $periodEnd) {
+            $subscriptionsInPeriod = $subscriptions->filter(function (Subscription $subscription) use ($periodEnd) {
                 return $subscription->created_at->lt($periodEnd);
             });
 
-            $createdInPeriod = $subscriptionsInPeriod->filter(function (Subscription $subscription) use ($periodStart, $periodEnd) {
+            $createdInPeriod = $subscriptionsInPeriod->filter(function (Subscription $subscription) use ($periodStart) {
                 return $subscription->created_at->gte($periodStart);
             })->count();
 
@@ -135,13 +135,14 @@ class SubscriptionHistory
         $startOfPeriods = (new Carbon($this->start))->startOf($this->period);
 
         do {
+            /** @psalm-suppress InvalidArgument */
             $periods->push([
                 $startOfPeriods->copy(),
-                $startOfPeriods->copy()->add(1, $this->period),
+                $startOfPeriods->copy()->add($this->period, 1),
                 $startOfPeriods->format($this->getPeriodTimestampFormat()),
             ]);
 
-            $startOfPeriods->add(1, $this->period);
+            $startOfPeriods->add($this->period, 1);
         } while ($startOfPeriods->lt($this->end));
 
         return $periods;

@@ -25,7 +25,7 @@ class SubscriptionBuilder
         $this->plan = $plan;
 
         if ($this->plan instanceof Plan) {
-            $this->withFeaturesFromPlan($plan);
+            $this->withFeaturesFromPlan($this->plan);
         }
     }
 
@@ -121,7 +121,7 @@ class SubscriptionBuilder
         return $this->skipTrial
             ? null
             : (
-                $this->trialDays !== null
+            $this->trialDays !== null
                 ? Carbon::now()->addDays($this->trialDays)
                 : null
             );

@@ -43,7 +43,7 @@ class SubscriptionFeature extends Model
             'code' => $feature->code,
             'metered' => $feature->metered,
             'quota' => $feature->metered
-                ? optional($feature->pivot)->default_quota + 0
+                ? optional($feature->pivot)->default_quota
                 : null,
             'used' => $feature->metered
                 ? 0
@@ -74,7 +74,7 @@ class SubscriptionFeature extends Model
     public function getRemainingAttribute(): int
     {
         return $this->isMetered()
-            ? $this->quota - $this->used
+            ? (intval($this->quota) - intval($this->used))
             : 0;
     }
 
