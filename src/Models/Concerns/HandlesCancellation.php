@@ -17,8 +17,6 @@ trait HandlesCancellation
      * Cancels a subscription at the end of the current period when not being on grace period already.
      *
      * Infinite subscriptions gets cancelled instantly.
-     *
-     * @return $this
      */
     public function cancel(): self
     {
@@ -35,22 +33,13 @@ trait HandlesCancellation
         return $this->cancelAt($endsAt);
     }
 
-    /**
-     * Cancels the subscription instantly. No matter if it is already on grace period.
-     *
-     * @return $this
-     */
+    /** Cancels the subscription instantly. No matter if it is already on grace period. */
     public function cancelNow(): self
     {
         return $this->cancelAt(Carbon::now());
     }
 
-    /**
-     * Cancels the subscription at the given timestamp. No matter if it is already on grace period.
-     *
-     * @param \DateTimeInterface $endsAt
-     * @return $this
-     */
+    /** Cancels the subscription at the given timestamp. No matter if it is already on grace period. */
     public function cancelAt(\DateTimeInterface $endsAt): self
     {
         $this->forceFill([
@@ -60,14 +49,9 @@ trait HandlesCancellation
         return $this;
     }
 
-    /**
-     * Start of the next period begin (or used at end of current cycle)
-     *
-     * @return \Illuminate\Support\Carbon
-     */
+    /** Start of the next period begin (or used at end of current cycle) */
     public function nextPeriod(): Carbon
     {
-        /** @var Carbon $endsAt */
         $endsAt = $this->ends_at !== null
             ? $this->ends_at
             : $this->created_at;
@@ -79,11 +63,7 @@ trait HandlesCancellation
         return $endsAt;
     }
 
-    /**
-     * Resumes an already cancelled subscription. Does nothing, when not on grace period.
-     *
-     * @return $this
-     */
+    /** Resumes an already cancelled subscription. Does nothing, when not on grace period. */
     public function resume(): self
     {
         if (! $this->isOnGracePeriod()) {

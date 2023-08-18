@@ -4,6 +4,7 @@ namespace Rokde\SubscriptionManager\Models\Concerns;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Rokde\SubscriptionManager\Models\Feature;
 use Rokde\SubscriptionManager\Models\Plan;
 use Rokde\SubscriptionManager\Models\Subscription;
 
@@ -42,13 +43,8 @@ trait Subscribable
             ->latest('id');
     }
 
-    /**
-     * Was the subscribable ever subscribed? When feature given only subscriptions with this feature will be checked.
-     *
-     * @param null|string|\Rokde\SubscriptionManager\Models\Feature $feature
-     * @return bool
-     */
-    public function everSubscribed($feature = null): bool
+    /** Was the subscribable ever subscribed? When feature given only subscriptions with this feature will be checked. */
+    public function everSubscribed(string|Feature|null $feature = null): bool
     {
         return $this->subscriptions
                 ->first(function (Subscription $subscription) use ($feature) {
@@ -56,13 +52,8 @@ trait Subscribable
                 }) !== null;
     }
 
-    /**
-     * Is the subscribable subscribed? When feature given only subscriptions with this feature will be checked.
-     *
-     * @param null|string|\Rokde\SubscriptionManager\Models\Feature $feature
-     * @return bool
-     */
-    public function subscribed($feature = null): bool
+    /** Is the subscribable subscribed? When feature given only subscriptions with this feature will be checked. */
+    public function subscribed(string|Feature|null $feature = null): bool
     {
         return $this->activeSubscriptions
                 ->first(function (Subscription $subscription) use ($feature) {
@@ -74,7 +65,7 @@ trait Subscribable
     /**
      * returns all active subscribed features
      *
-     * @return array|string[]
+     * @return array<string>
      */
     public function subscribedFeatures(): array
     {
@@ -87,12 +78,7 @@ trait Subscribable
             ->all();
     }
 
-    /**
-     * Is the subscribable actively subscribed on a plan?
-     *
-     * @param \Rokde\SubscriptionManager\Models\Plan $plan
-     * @return bool
-     */
+    /** Is the subscribable actively subscribed on a plan? */
     public function onPlan(Plan $plan): bool
     {
         return $this->activeSubscriptions()

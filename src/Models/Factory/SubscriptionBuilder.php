@@ -19,11 +19,6 @@ class SubscriptionBuilder
     protected array $features = [];
     protected ?string $period = 'P1Y';
 
-    /**
-     * SubscriptionBuilder constructor.
-     * @param \Illuminate\Database\Eloquent\Model $subscribable
-     * @param \Rokde\SubscriptionManager\Models\Plan|null $plan
-     */
     public function __construct(Model $subscribable, ?Plan $plan = null)
     {
         $this->subscribable = $subscribable;
@@ -37,8 +32,7 @@ class SubscriptionBuilder
     /**
      * Use the given features
      *
-     * @param array|string[]|\Illuminate\Database\Eloquent\Collection|\Rokde\SubscriptionManager\Models\Feature[] $features
-     * @return $this
+     * @param array<string>|\Illuminate\Database\Eloquent\Collection|\Rokde\SubscriptionManager\Models\Feature[] $features
      */
     public function withFeatures($features): self
     {
@@ -64,12 +58,7 @@ class SubscriptionBuilder
         return $this;
     }
 
-    /**
-     * set trial days
-     *
-     * @param int $trialDays
-     * @return $this
-     */
+    /** set trial days */
     public function trialDays(int $trialDays): self
     {
         $this->trialDays = $trialDays;
@@ -77,11 +66,7 @@ class SubscriptionBuilder
         return $this;
     }
 
-    /**
-     * set trial days to null
-     *
-     * @return $this
-     */
+    /** set trial days to null */
     public function skipTrial(): self
     {
         $this->skipTrial = true;
@@ -92,11 +77,7 @@ class SubscriptionBuilder
         return $this;
     }
 
-    /**
-     * unset period string
-     *
-     * @return $this
-     */
+    /** unset period string */
     public function infinitePeriod(): self
     {
         $this->period = null;
@@ -104,13 +85,8 @@ class SubscriptionBuilder
         return $this;
     }
 
-    /**
-     * Set period
-     *
-     * @param \DateInterval|string $period
-     * @return $this
-     */
-    public function periodLength($period): self
+    /** Set period */
+    public function periodLength(\DateInterval|string $period): self
     {
         if ($period instanceof \DateInterval) {
             $period = CarbonInterval::getDateIntervalSpec($period);
@@ -121,11 +97,7 @@ class SubscriptionBuilder
         return $this;
     }
 
-    /**
-     * Creates the subscription with all values already set
-     *
-     * @return \Rokde\SubscriptionManager\Models\Subscription
-     */
+    /** Creates the subscription with all values already set */
     public function create(): Subscription
     {
         /** @var Subscription $subscription */
@@ -143,11 +115,7 @@ class SubscriptionBuilder
         return $subscription;
     }
 
-    /**
-     * Returns trial end with given parameters
-     *
-     * @return \DateTimeInterface|null
-     */
+    /** Returns trial end with given parameters */
     protected function getTrialEnd(): ?\DateTimeInterface
     {
         return $this->skipTrial

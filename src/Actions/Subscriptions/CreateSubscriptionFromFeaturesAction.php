@@ -10,13 +10,8 @@ class CreateSubscriptionFromFeaturesAction
 {
     /**
      * create a subscription from plan for subscribable
-     *
-     * @param array $featureCodes
-     * @param \Illuminate\Database\Eloquent\Model $subscribable
-     * @param \callable|null $callback for modifying the internal SubscriptionBuilder instance
-     * @return \Rokde\SubscriptionManager\Models\Subscription
      */
-    public function execute(array $featureCodes, Model $subscribable, $callback = null): Subscription
+    public function execute(array $featureCodes, Model $subscribable, \callable|\Closure|null $callback = null): Subscription
     {
         $factory = (new SubscriptionBuilder($subscribable))
             ->withFeatures($featureCodes);

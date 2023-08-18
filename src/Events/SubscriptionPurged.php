@@ -5,7 +5,7 @@ namespace Rokde\SubscriptionManager\Events;
 /**
  * Class SubscriptionPurged
  *
- * This event gets thrown when subscription was purged. Purged is the final deletion on soft-deletables.
+ * This event gets thrown when subscription was purged. Purged is the final deletion on soft-deletable.
  *
  * @package Rokde\SubscriptionManager\Events
  */

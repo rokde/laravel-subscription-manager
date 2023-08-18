@@ -12,13 +12,6 @@ class SubscriptionCircle
     private Carbon $end;
     private int $number;
 
-    /**
-     * SubscriptionCircle constructor.
-     * @param \Rokde\SubscriptionManager\Models\Subscription $subscription
-     * @param \Carbon\Carbon $start
-     * @param \Carbon\Carbon $end
-     * @param int $number
-     */
     public function __construct(Subscription $subscription, Carbon $start, Carbon $end, int $number)
     {
         $this->subscription = $subscription;
@@ -27,81 +20,49 @@ class SubscriptionCircle
         $this->number = $number;
     }
 
-    /**
-     * Reference to subscription
-     *
-     * @return \Rokde\SubscriptionManager\Models\Subscription
-     */
+    /** Reference to subscription */
     public function subscription(): Subscription
     {
         return $this->subscription;
     }
 
-    /**
-     * Start of the subscription circle
-     *
-     * @return \Carbon\Carbon
-     */
+    /** Start of the subscription circle */
     public function start(): Carbon
     {
         return $this->start;
     }
 
-    /**
-     * End of the subscription circle
-     *
-     * @return \Carbon\Carbon
-     */
+    /** End of the subscription circle */
     public function end(): Carbon
     {
         return $this->end;
     }
 
-    /**
-     * Period length of the subscription circle
-     *
-     * @return \DateInterval
-     */
+    /** Period length of the subscription circle */
     public function periodLength(): \DateInterval
     {
         return $this->start->diff($this->end);
     }
 
-    /**
-     * Returns interval string for current subscription circle
-     *
-     * @return string
-     */
+    /** Returns interval string for current subscription circle */
     public function intervalString(): string
     {
         return CarbonInterval::getDateIntervalSpec($this->periodLength());
     }
 
-    /**
-     * Returns number of the subscription circle within the subscription
-     *
-     * @return int
-     */
+    /** Returns number of the subscription circle within the subscription */
     public function number(): int
     {
         return $this->number;
     }
 
-    /**
-     * Get a unique number for subscription circle within the subscription
-     *
-     * @return string
-     */
+    /** Get a unique number for subscription circle within the subscription  */
     public function id(): string
     {
         return $this->subscription->getKey() . '-' . $this->number;
     }
 
-    /**
-     * Array representation of a subscription circle
-     *
-     * @return array
-     */
+    /** Array representation of a subscription circle  */
     public function toArray(): array
     {
         return [

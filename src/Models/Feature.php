@@ -24,27 +24,16 @@ class Feature extends Model
 {
     use HasFactory;
 
-    /**
-     * @var string[]
-     */
     protected $fillable = [
         'code',
         'metered',
     ];
 
-    /**
-     * @var array
-     */
     protected $casts = [
         'metered' => 'boolean',
     ];
 
-    /**
-     * Returns a feature by its code
-     *
-     * @param string $code
-     * @return \Rokde\SubscriptionManager\Models\Feature|null
-     */
+    /** Returns a feature by its code */
     public static function byCode(string $code): ?self
     {
         return static::where('code', $code)->first();

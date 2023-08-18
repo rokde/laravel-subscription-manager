@@ -9,11 +9,6 @@ class AttachFeatureToPlanAction
 {
     /**
      * attaches a feature to a plan; metered features should have a default quota
-     *
-     * @param \Rokde\SubscriptionManager\Models\Plan $plan
-     * @param \Rokde\SubscriptionManager\Models\Feature $feature
-     * @param int|null $defaultQuota
-     * @return \Rokde\SubscriptionManager\Models\Plan
      */
     public function execute(Plan $plan, Feature $feature, ?int $defaultQuota = null): Plan
     {

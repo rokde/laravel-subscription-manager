@@ -14,11 +14,6 @@ class Subscribed
      * - resolve a subscribable
      * - does it have the method `subscribed`
      * - check `subscribed` on subscribable
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
-     * @param null|string $feature
-     * @return mixed
      */
     public function handle(Request $request, Closure $next, ?string $feature = null)
     {

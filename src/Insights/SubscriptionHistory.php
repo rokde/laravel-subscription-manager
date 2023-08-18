@@ -21,11 +21,6 @@ class SubscriptionHistory
 
     protected string $period;
 
-    /**
-     * SubscriptionHistory constructor.
-     * @param \DateTimeInterface|null $start (last month)
-     * @param string $period (day, hour, minute, month, week*, year)
-     */
     public function __construct(?\DateTimeInterface $start = null, string $period = self::PERIOD_WEEK)
     {
         $this->start = $start ?? new \DateTime('last month');
@@ -33,12 +28,7 @@ class SubscriptionHistory
         $this->period = $period;
     }
 
-    /**
-     * set start for history analysing
-     *
-     * @param \DateTimeInterface $start
-     * @return $this
-     */
+    /** set start for history analysing */
     public function from(\DateTimeInterface $start): self
     {
         $this->start = $start;
@@ -46,12 +36,7 @@ class SubscriptionHistory
         return $this;
     }
 
-    /**
-     * set end for history analysing
-     *
-     * @param \DateTimeInterface $end
-     * @return $this
-     */
+    /** set end for history analysing */
     public function until(\DateTimeInterface $end): self
     {
         $this->end = $end;
@@ -59,12 +44,7 @@ class SubscriptionHistory
         return $this;
     }
 
-    /**
-     * group partition by
-     *
-     * @param string $period (day, hour, minute, month, week, year)
-     * @return $this
-     */
+    /** group partition by period */
     public function groupBy(string $period): self
     {
         $this->period = $period;
@@ -72,11 +52,7 @@ class SubscriptionHistory
         return $this;
     }
 
-    /**
-     * returns histogram data, keyed by a period grouping key
-     *
-     * @return \Illuminate\Support\Collection|array[]
-     */
+    /** returns histogram data, keyed by a period grouping key */
     public function get(): Collection
     {
         $periods = $this->generatePeriods();
@@ -150,7 +126,6 @@ class SubscriptionHistory
     /**
      * generates a period collection of dates between start and end (including dates)
      *
-     * @return \Illuminate\Support\Collection
      * Thanks to the great work of Spatie!
      * Code majorly copied from https://github.com/spatie/laravel-stats/blob/master/src/StatsQuery.php
      */
@@ -175,7 +150,6 @@ class SubscriptionHistory
     /**
      * return period-base timestamp format, used for key of histogram collection
      *
-     * @return string
      * Thanks to the great work of Spatie!
      * Code majorly copied from https://github.com/spatie/laravel-stats/blob/master/src/StatsQuery.php
      */

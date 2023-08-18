@@ -11,13 +11,8 @@ class CreateSubscriptionFromPlanAction
 {
     /**
      * create a subscription from plan for subscribable
-     *
-     * @param \Rokde\SubscriptionManager\Models\Plan $plan
-     * @param \Illuminate\Database\Eloquent\Model $subscribable
-     * @param \callable|null $callback for modifying the internal SubscriptionBuilder instance
-     * @return \Rokde\SubscriptionManager\Models\Subscription
      */
-    public function execute(Plan $plan, Model $subscribable, $callback = null): Subscription
+    public function execute(Plan $plan, Model $subscribable, \callable|\Closure|null $callback = null): Subscription
     {
         $factory = new SubscriptionBuilder($subscribable, $plan);
         if ($callback !== null) {

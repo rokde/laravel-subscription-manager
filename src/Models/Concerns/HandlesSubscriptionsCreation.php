@@ -2,6 +2,7 @@
 
 namespace Rokde\SubscriptionManager\Models\Concerns;
 
+use Illuminate\Database\Eloquent\Collection;
 use Rokde\SubscriptionManager\Models\Factory\SubscriptionBuilder;
 use Rokde\SubscriptionManager\Models\Plan;
 
@@ -13,12 +14,7 @@ use Rokde\SubscriptionManager\Models\Plan;
  */
 trait HandlesSubscriptionsCreation
 {
-    /**
-     * Creates a subscription. When a plan is given, the plan features will be assigned.
-     *
-     * @param \Rokde\SubscriptionManager\Models\Plan|null $plan
-     * @return \Rokde\SubscriptionManager\Models\Factory\SubscriptionBuilder
-     */
+    /** Creates a subscription. When a plan is given, the plan features will be assigned. */
     public function newSubscription(?Plan $plan = null): SubscriptionBuilder
     {
         return new SubscriptionBuilder($this, $plan);
@@ -27,10 +23,9 @@ trait HandlesSubscriptionsCreation
     /**
      * Creates a subscription with a set of features assigned.
      *
-     * @param @param array|string[]|\Illuminate\Database\Eloquent\Collection|\Rokde\SubscriptionManager\Models\Feature[] $features
-     * @return \Rokde\SubscriptionManager\Models\Factory\SubscriptionBuilder
+     * @param @param array<string>|\Illuminate\Database\Eloquent\Collection<\Rokde\SubscriptionManager\Models\Feature> $features
      */
-    public function newFeatureSubscription($features): SubscriptionBuilder
+    public function newFeatureSubscription(array|Collection $features): SubscriptionBuilder
     {
         return (new SubscriptionBuilder($this))
             ->withFeatures($features);
