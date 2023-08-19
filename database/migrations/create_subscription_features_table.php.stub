@@ -11,11 +11,13 @@ class CreateSubscriptionFeaturesTable extends Migration
         Schema::create('subscription_features', function (Blueprint $table) {
             $table->id();
             $table->foreignId('subscription_id')->constrained()->onDelete('cascade');
-            $table->string('code', 64)->unique();
+            $table->string('code', 64);
             $table->boolean('metered')->default(false);
             $table->unsignedInteger('quota')->nullable()->default(null);
             $table->unsignedInteger('used')->nullable()->default(null);
             $table->timestamps();
+
+            $table->unique(['subscription_id', 'code']);
         });
     }
 
