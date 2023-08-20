@@ -31,9 +31,8 @@ trait Subscribable
 
     public function activeSubscriptions(): MorphMany
     {
-        return $this->morphMany(Subscription::class, 'subscribable')
-            ->active()
-            ->latest('id');
+        return $this->subscriptions()
+            ->active();
     }
 
     public function subscription(): MorphOne
