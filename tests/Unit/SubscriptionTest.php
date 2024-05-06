@@ -131,7 +131,7 @@ class SubscriptionTest extends TestCase
             'ends_at' => Carbon::now()->subDay(),
         ]);
 
-        $this->assertEquals(CarbonInterval::year(1), $subscription->periodLength());
+        $this->assertEquals(CarbonInterval::year(1)->forHumans(), $subscription->periodLength()->forHumans());
     }
 
     /** @test */
@@ -145,7 +145,7 @@ class SubscriptionTest extends TestCase
         ]);
 
         $this->assertFalse($subscription->isRecurring());
-        $this->assertEquals(CarbonInterval::years(1000), $subscription->periodLength());
+        $this->assertEquals(CarbonInterval::years(1000)->forHumans(), $subscription->periodLength()->forHumans());
     }
 
     /** @test */

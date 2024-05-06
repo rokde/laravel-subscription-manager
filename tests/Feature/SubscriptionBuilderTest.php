@@ -81,7 +81,7 @@ class SubscriptionBuilderTest extends TestCase
 
         $this->assertFalse($subscription->isRecurring());
         $this->assertNull($subscription->period);
-        $this->assertEquals(CarbonInterval::years(1000), $subscription->periodLength());
+        $this->assertEquals(CarbonInterval::years(1000)->forHumans(), $subscription->periodLength()->forHumans());
     }
 
     /** @test */
@@ -105,7 +105,7 @@ class SubscriptionBuilderTest extends TestCase
 
         $this->assertTrue($subscription->isRecurring());
         $this->assertEquals('P1D', $subscription->period);
-        $this->assertEquals(CarbonInterval::day(), $subscription->periodLength());
+        $this->assertEquals(CarbonInterval::day()->forHumans(), $subscription->periodLength()->forHumans());
     }
 
     /** @test */
@@ -129,7 +129,7 @@ class SubscriptionBuilderTest extends TestCase
 
         $this->assertTrue($subscription->isRecurring());
         $this->assertEquals('P7D', $subscription->period);
-        $this->assertEquals(CarbonInterval::week(), $subscription->periodLength());
+        $this->assertEquals(CarbonInterval::week()->forHumans(), $subscription->periodLength()->forHumans());
     }
 
     /** @test */
