@@ -63,6 +63,11 @@ class SubscribedMiddlewareTest extends TestCase
             {
                 return 'remember_me';
             }
+
+            public function getAuthPasswordName()
+            {
+                return 'password';
+            }
         };
 
         $this->actingAs($user);
