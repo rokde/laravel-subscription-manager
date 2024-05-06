@@ -65,11 +65,12 @@ class SubscriptionBuilderTest extends TestCase
         $model = new class extends Model {
             use Subscribable;
 
+            protected $fillable = ['id'];
+
             public function __construct(array $attributes = [])
             {
+                $attributes['id'] = 1;
                 parent::__construct($attributes);
-
-                $this->id = 1;
             }
         };
 
