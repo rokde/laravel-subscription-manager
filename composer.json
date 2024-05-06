@@ -17,21 +17,21 @@
     ],
     "require": {
         "php": "^8.2",
-        "illuminate/config": "^v10.19",
-        "illuminate/console": "^v10.19",
-        "illuminate/contracts": "^v10.19",
-        "illuminate/database": "^v10.19",
-        "illuminate/http": "^v10.19",
-        "illuminate/routing": "^v10.19",
-        "illuminate/support": "^v10.19",
+        "illuminate/config": "^10.19|^11.0",
+        "illuminate/console": "^10.19|^11.0",
+        "illuminate/contracts": "^10.19|^11.0",
+        "illuminate/database": "^10.19|^11.0",
+        "illuminate/http": "^10.19|^11.0",
+        "illuminate/routing": "^10.19|^11.0",
+        "illuminate/support": "^10.19|^11.0",
         "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
         "brianium/paratest": "^v7.2",
-        "nunomaduro/collision": "^v7.8",
-        "orchestra/testbench": "^v8.8",
-        "phpunit/phpunit": "^10.3",
-        "psalm/plugin-laravel": "^2.8",
+        "nunomaduro/collision": "^v7.8|^8.0",
+        "orchestra/testbench": "^v8.8|^9.0",
+        "phpunit/phpunit": "^10.3|^11.0",
+        "psalm/plugin-laravel": "^2.11",
         "vimeo/psalm": "^5.14"
     },
     "autoload": {
