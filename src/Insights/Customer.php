@@ -11,8 +11,6 @@ class Customer
 {
     /**
      * returns all customers - distinct list of subscribers
-     *
-     * @return \Illuminate\Database\Eloquent\Collection<int, \Illuminate\Database\Eloquent\Model>
      */
     public function get(?CarbonPeriod $period = null): Collection
     {

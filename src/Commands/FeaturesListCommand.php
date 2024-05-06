@@ -11,7 +11,7 @@ class FeaturesListCommand extends Command
 
     public $description = 'List all features';
 
-    public function handle()
+    public function handle(): void
     {
         $rows = Feature::orderBy('code')
             ->get()

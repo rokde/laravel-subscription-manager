@@ -11,7 +11,7 @@ class PlansListCommand extends Command
 
     public $description = 'List all plans with their features';
 
-    public function handle()
+    public function handle(): void
     {
         $rows = Plan::orderBy('name')
             ->get()

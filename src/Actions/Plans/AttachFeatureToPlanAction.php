@@ -17,7 +17,7 @@ class AttachFeatureToPlanAction
             $defaultQuota = null;
         } else {
             //  cast to integer
-            $defaultQuota += 0;
+            $defaultQuota = intval($defaultQuota);
             $defaultQuota = max(0, $defaultQuota);
         }
 
