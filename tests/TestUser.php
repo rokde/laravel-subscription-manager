@@ -51,4 +51,9 @@ class TestUser extends Model implements Authenticatable
     {
         return 'remember_me';
     }
+
+    public function getAuthPasswordName()
+    {
+        return 'password';
+    }
 }
